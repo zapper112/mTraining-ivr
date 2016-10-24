@@ -7,5 +7,4 @@ import org.springframework.stereotype.Controller;
 @Controller
 public interface BasicController {
 
-    IVRResponse service();
 }
