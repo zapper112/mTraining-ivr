@@ -6,10 +6,6 @@ import org.w3c.dom.Node;
 
 import java.io.StringWriter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -17,17 +13,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-@XmlRootElement
 public class Response {
 
-    @XmlElement
     DocumentBuilderFactory dbfac;
-
-    @XmlElement
     DocumentBuilder docBuilder;
-
     Document doc;
-
     Element response;
 
     public enum SayAs {
@@ -201,9 +191,5 @@ public class Response {
 
     public Element getRoot() {
         return this.response;
-    }
-
-    public Document getDoc() {
-        return this.doc;
     }
 }
