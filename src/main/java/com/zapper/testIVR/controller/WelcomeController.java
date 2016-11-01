@@ -20,7 +20,8 @@ public class WelcomeController implements BasicController {
   public String startService(HttpServletRequest request) {
     Response response = new Response();
     String event = request.getParameter("event");
-
+    String sid = request.getParameter("sid");
+    String cid = request.getParameter("cid");
     if (event != null && event.toLowerCase().equals("newcall")) {
       CollectDtmf collectDtmf = new CollectDtmf();
       collectDtmf.setMaxDigits(1);
