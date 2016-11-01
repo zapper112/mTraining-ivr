@@ -12,7 +12,11 @@ import org.hibernate.cfg.Configuration;
  */
 public class UserDao {
 
-  public void addUser(User user) {
+  /**
+   * DAO method to add a user to the database if it doesn't exist. Update otherwise.
+   * @param user : The user to be persisted in the database
+   */
+  public void addOrUpdateUser(User user) {
     Configuration configuration = new Configuration().configure();
     SessionFactory sessionFactory = configuration.buildSessionFactory();
     Session session = sessionFactory.openSession();
@@ -22,6 +26,11 @@ public class UserDao {
     session.close();
   }
 
+  /**
+   * DAO method to return a User identified by its <code>callerId</code>
+   * @param callerId
+   * @return the user (if any) found from the data source
+   */
   public User getUser(String callerId) {
     Configuration configuration = new Configuration().configure();
     SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -31,4 +40,5 @@ public class UserDao {
     transaction.commit();
     return retrievedUser;
   }
+
 }

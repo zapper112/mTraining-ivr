@@ -1,8 +1,12 @@
 package com.zapper.testIVR.controller;
 
+import com.zapper.testIVR.dao.UserDao;
 import com.zapper.testIVR.kookooJava.CollectDtmf;
 import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.StandardMessage;
+import com.zapper.testIVR.model.User;
+import com.zapper.testIVR.service.Home;
+import com.zapper.testIVR.util.UserUtil;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,17 +22,24 @@ public class WelcomeController implements BasicController {
   @RequestMapping(value = "/home", method = RequestMethod.GET)
   @ResponseBody
   public String startService(HttpServletRequest request) {
+
     Response response = new Response();
     String event = request.getParameter("event");
     String sid = request.getParameter("sid");
     String cid = request.getParameter("cid");
+    System.out.println("event = " + event);
+    System.out.println("sid = " + sid);
+    System.out.println("cid = " + cid);
+
     if (event != null && event.toLowerCase().equals("newcall")) {
-      CollectDtmf collectDtmf = new CollectDtmf();
-      collectDtmf.setMaxDigits(1);
-      collectDtmf.addPlayText(StandardMessage.welcome);
-      collectDtmf.addPlayText(StandardMessage.beginCourse);
-      collectDtmf.addPlayText(StandardMessage.exitTraining);
-      response.addCollectDtmf(collectDtmf);
+      if(UserUtil.checkIfUserExists(cid)) {
+        System.out.println("\nUser already present in database. Therefore updated.\n");
+        UserUtil.addOrUpdateUser(new User(cid,sid));
+        return new Home().continueSession(new User(cid,sid));
+      } else {
+        UserUtil.addOrUpdateUser(new User(cid,sid));
+        System.out.println("\nUser added to database\n");
+        return new Home().startSession();}
     } else if (event != null && event.toLowerCase().equals("gotdtmf")) {
       if (request.getParameter("data").equals("1")) {
         response.addPlayText(StandardMessage.oralMedicineCourseStart);

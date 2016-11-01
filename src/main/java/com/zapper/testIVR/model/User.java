@@ -19,6 +19,14 @@ public class User {
   @Column(name = "sessionId")
   private String sessionId;
 
+  public User() {
+  }
+
+  public User(String callerId, String sessionId) {
+    setCallerId(callerId);
+    setSessionId(sessionId);
+  }
+
   public void setCallerId (String callerId) {
     this.callerId = callerId;
   }
