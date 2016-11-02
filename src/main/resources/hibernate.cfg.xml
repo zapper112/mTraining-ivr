@@ -16,5 +16,8 @@
         <mapping class="com.zapper.testIVR.model.Module"/>
         <mapping class="com.zapper.testIVR.model.Chapter"/>
         <mapping class="com.zapper.testIVR.model.Message"/>
+        <mapping class="com.zapper.testIVR.model.Quiz"/>
+        <mapping class="com.zapper.testIVR.model.Question"/>
+        <mapping class="com.zapper.testIVR.model.Option"/>
     </session-factory>
 </hibernate-configuration>

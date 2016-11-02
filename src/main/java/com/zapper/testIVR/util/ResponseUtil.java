@@ -1,9 +1,12 @@
 package com.zapper.testIVR.util;
 
+import com.zapper.testIVR.kookooJava.CollectDtmf;
 import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.Message;
 import com.zapper.testIVR.model.Module;
+import com.zapper.testIVR.model.Option;
+import com.zapper.testIVR.model.Question;
 import com.zapper.testIVR.model.Quiz;
 
 import java.util.List;
@@ -29,14 +32,33 @@ public class ResponseUtil {
       List<Message> messagesForChapter = new MessageUtil().getMessagesForChapter(chapters.get(i).getId());
       List<Quiz> quizzesForChapter = new QuizUtil().getQuizzesForChapter(chapters.get(i).getId());
       ResponseUtil.addMessagesInChapter(response, messagesForChapter);
-      //ResponseUtil.addQuizzesInChapter(response, quizzesForChapter);
+      ResponseUtil.addQuizzesInChapter(response, quizzesForChapter);
     }
   }
 
   private static void addMessagesInChapter(Response response, List<Message> messages) {
-    for(int i = 0; i < messages.size(); i++ )
-      response.addPlayText(messages.get(i).getContent());
+      for(Message message : messages)
+      response.addPlayText(message.getContent());
   }
 
-  private static void addQuizzesInChapter(Response response, List<Quiz> quizzes) {}
+  private static void addQuizzesInChapter(Response response, List<Quiz> quizzes) {
+    for(Quiz quiz : quizzes)
+      ResponseUtil.addQuizInChapter(response, quiz);
+  }
+
+  private static void addQuizInChapter(Response response, Quiz quiz) {
+    List<Question> questions = new QuizUtil().getQuestionsForQuiz(quiz.getId());
+    for(Question question : questions) addQuestionInQuiz(response, question);
+  }
+
+  private static void addQuestionInQuiz(Response response, Question question) {
+    List<Option> options = new QuizUtil().getOptionsForQuestion(question.getId());
+    CollectDtmf cd = new CollectDtmf();
+    cd.addPlayText(question.getQuestionText());
+    for(Option option : options) {
+      cd.addPlayText("Option number - " + option.getOptionNo());
+      cd.addPlayText(option.getOptionText());
+    }
+    response.addCollectDtmf(cd);
+  }
  }

@@ -24,6 +24,9 @@ public class Quiz {
   @Column(name = "no_of_questions")
   private Integer numberOfQuestions;
 
+  public Quiz() {
+  }
+
   public Quiz(Integer id, Integer chapterId, Integer numberOfQuestions) {
     this.id = id;
     this.chapterId = chapterId;

@@ -5,7 +5,7 @@ package com.zapper.testIVR.dao;
  */
 public class ChapterDao {
 
-  public static String getChaptersInModuleQuery(Integer moduleId) {
+  public static String getChaptersInModuleQuery() {
     return "select C.Id as id, C.name as name from Chapter C where C.moduleId = :moduleId order by C.Id";
   }
 

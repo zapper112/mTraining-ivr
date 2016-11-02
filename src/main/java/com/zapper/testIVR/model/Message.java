@@ -22,6 +22,9 @@ public class Message {
   @Column(name = "chapter_id")
   private Integer chapterId;
 
+  public Message() {
+  }
+
   public Message(Integer id, String content, Integer chapterId) {
     this.Id = id;
     this.chapterId = chapterId;

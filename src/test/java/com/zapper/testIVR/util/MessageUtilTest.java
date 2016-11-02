@@ -17,7 +17,7 @@ public class MessageUtilTest {
   @Test
   @Ignore
   public void testGetMessagesForChapter() throws Exception {
-    List<Message> messages = new MessageUtil().getMessagesForChapter(2);
+    List<Message> messages = new MessageUtil().getMessagesForChapter(1);
     for (Message message : messages) {
       System.out.println("Id = " + message.getId());
       System.out.println("Content = " + message.getContent());

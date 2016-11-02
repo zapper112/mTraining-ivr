@@ -9,7 +9,7 @@ import org.hibernate.Query;
  */
 public class ModuleDao {
 
-  public static String getModulesInCourseQuery(Integer courseId) {
+  public static String getModulesInCourseQuery() {
     return  "select M.id as id, M.name as name from Module M where M.courseId = :courseId order by M.id";
   }
 }

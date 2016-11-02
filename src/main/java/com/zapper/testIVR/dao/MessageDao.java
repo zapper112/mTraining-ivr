@@ -5,7 +5,7 @@ package com.zapper.testIVR.dao;
  */
 public class MessageDao {
 
-  public static String getMessagesInChapterQuery(Integer chapterId) {
+  public static String getMessagesInChapterQuery() {
     return "select M.id as id, M.content as content from Message M where M.chapterId = :chapterId order by M.id";
   }
 }
