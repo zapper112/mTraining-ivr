@@ -2,9 +2,11 @@ package com.zapper.testIVR.util;
 
 import com.zapper.testIVR.dao.ChapterDao;
 import com.zapper.testIVR.dao.CourseDao;
+import com.zapper.testIVR.dao.MessageDao;
 import com.zapper.testIVR.dao.ModuleDao;
 import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.Course;
+import com.zapper.testIVR.model.Message;
 import com.zapper.testIVR.model.Module;
 
 import org.hibernate.Query;
@@ -14,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
 import javax.persistence.criteria.CriteriaBuilder;
 
@@ -65,6 +68,21 @@ public class DBUtil {
       chapters.add(new Chapter(chatperId, chapterName, moduleId));
     }
     return chapters;
+  }
+
+  static List<Message> getMessagesForChapter(Integer chapterId) {
+    String messageQuery = MessageDao.getMessagesInChapterQuery(chapterId);
+    Query query = HibernateUtil.getSession().createQuery(messageQuery).setParameter("chapterId",chapterId);
+    List<Message> results = query.list();
+    Iterator it = results.iterator();
+    List<Message> messages = new ArrayList<Message>();
+    while(it.hasNext()) {
+      Object[] objects = (Object[]) it.next();
+      Integer messageId = (Integer) objects[0];
+      String messageContent = (String) objects[1];
+      messages.add(new Message(messageId,messageContent,chapterId));
+    }
+    return messages;
   }
 
 }
