@@ -1,9 +1,6 @@
 package com.zapper.testIVR.controller;
 
-import com.zapper.testIVR.dao.UserDao;
-import com.zapper.testIVR.kookooJava.CollectDtmf;
 import com.zapper.testIVR.kookooJava.Response;
-import com.zapper.testIVR.model.StandardMessage;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.service.Home;
 import com.zapper.testIVR.util.CourseUtil;
@@ -17,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class WelcomeController implements BasicController {
+public class WelcomeController {
 
 
   @RequestMapping(value = "/home", method = RequestMethod.GET)
@@ -43,10 +40,10 @@ public class WelcomeController implements BasicController {
         String returnXML = new CourseUtil().startCoursesFromBeginning();
         return returnXML;
       } else if (request.getParameter("data").equals("2")) {
-        response.addPlayText(StandardMessage.callHangupValid);
+        response.addPlayText("Thank you for calling M-Training");
         response.addHangup();
       } else {
-        response.addPlayText(StandardMessage.callHangupInvalid);
+        response.addPlayText("Sorry that is not a valid input");
         response.addHangup();
       }
     }

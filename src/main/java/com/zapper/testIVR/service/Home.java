@@ -2,7 +2,6 @@ package com.zapper.testIVR.service;
 
 import com.zapper.testIVR.kookooJava.CollectDtmf;
 import com.zapper.testIVR.kookooJava.Response;
-import com.zapper.testIVR.model.StandardMessage;
 import com.zapper.testIVR.model.User;
 
 /**
@@ -14,9 +13,9 @@ public class Home {
   public String startSession() {
     CollectDtmf collectDtmf = new CollectDtmf();
     collectDtmf.setMaxDigits(1);
-    collectDtmf.addPlayText(StandardMessage.welcome);
-    collectDtmf.addPlayText(StandardMessage.beginCourse);
-    collectDtmf.addPlayText(StandardMessage.exitTraining);
+    collectDtmf.addPlayText("Hello! Welcome to M-Training");
+    collectDtmf.addPlayText("To start Course press 1");
+    collectDtmf.addPlayText("To exit M-Training press 2");
     response.addCollectDtmf(collectDtmf);
     return response.getXML();
   }
