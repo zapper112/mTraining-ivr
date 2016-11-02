@@ -22,7 +22,8 @@ public class Home {
   }
 
   public String continueSession(User user) {
-    response.addPlayText("User already found. This is good enough for P O C");
+    response.addPlayText("Welcome back");
+    response.addPlayText(startSession());
     response.addHangup();
     return response.getXML();
   }

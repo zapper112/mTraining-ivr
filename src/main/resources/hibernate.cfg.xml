@@ -12,5 +12,7 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <mapping class="com.zapper.testIVR.model.User"/>
+        <mapping class="com.zapper.testIVR.model.Course"/>
+        <mapping class="com.zapper.testIVR.model.Module"/>
     </session-factory>
 </hibernate-configuration>

@@ -6,6 +6,7 @@ import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.StandardMessage;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.service.Home;
+import com.zapper.testIVR.util.CourseUtil;
 import com.zapper.testIVR.util.UserUtil;
 
 import org.springframework.stereotype.Controller;
@@ -27,26 +28,20 @@ public class WelcomeController implements BasicController {
     String event = request.getParameter("event");
     String sid = request.getParameter("sid");
     String cid = request.getParameter("cid");
-    System.out.println("event = " + event);
-    System.out.println("sid = " + sid);
-    System.out.println("cid = " + cid);
 
     if (event != null && event.toLowerCase().equals("newcall")) {
       if(UserUtil.checkIfUserExists(cid)) {
-        System.out.println("\nUser already present in database. Therefore updated.\n");
         UserUtil.addOrUpdateUser(new User(cid,sid));
         return new Home().continueSession(new User(cid,sid));
       } else {
         UserUtil.addOrUpdateUser(new User(cid,sid));
-        System.out.println("\nUser added to database\n");
         return new Home().startSession();}
-    } else if (event != null && event.toLowerCase().equals("gotdtmf")) {
+    }
+
+      else if (event != null && event.toLowerCase().equals("gotdtmf")) {
       if (request.getParameter("data").equals("1")) {
-        response.addPlayText(StandardMessage.oralMedicineCourseStart);
-        CollectDtmf cd = new CollectDtmf();
-        cd.addPlayText(StandardMessage.quizPrompt);
-        response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/quiz");
-        response.addCollectDtmf(cd);
+        String returnXML = new CourseUtil().startCoursesFromBeginning();
+        return returnXML;
       } else if (request.getParameter("data").equals("2")) {
         response.addPlayText(StandardMessage.callHangupValid);
         response.addHangup();
