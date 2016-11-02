@@ -1,7 +1,9 @@
 package com.zapper.testIVR.util;
 
+import com.zapper.testIVR.dao.ChapterDao;
 import com.zapper.testIVR.dao.CourseDao;
 import com.zapper.testIVR.dao.ModuleDao;
+import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.Course;
 import com.zapper.testIVR.model.Module;
 
@@ -49,4 +51,20 @@ public class DBUtil {
     }
     return modules;
   }
+
+  static List<Chapter> getChaptersForModule(Integer moduleId) {
+    String chapterQuery = ChapterDao.getChaptersInModuleQuery(moduleId);
+    Query query = HibernateUtil.getSession().createQuery(chapterQuery).setParameter("moduleId",moduleId);
+    List<Chapter> results = query.list();
+    Iterator it = results.iterator();
+    List<Chapter> chapters = new ArrayList<Chapter>();
+    while(it.hasNext()) {
+      Object[] objects = (Object[]) it.next();
+      Integer chatperId = (Integer) objects[0];
+      String chapterName = (String) objects[1];
+      chapters.add(new Chapter(chatperId, chapterName, moduleId));
+    }
+    return chapters;
+  }
+
 }

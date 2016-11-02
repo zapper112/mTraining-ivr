@@ -25,27 +25,22 @@ public class Chapter {
 
   public Chapter() {};
 
-  public void setId(Integer id) {
-    this.Id = id;
-  }
-
   public Integer getId() {
     return this.Id;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public String getName() {
     return name;
   }
 
+  public Chapter(Integer id, String name, Integer moduleId) {
+    this.Id = id;
+    this.name = name;
+    this.moduleId = moduleId;
+  }
+
   public Integer getModuleId() {
     return moduleId;
   }
 
-  public void setModuleId(Integer moduleId) {
-    this.moduleId = moduleId;
-  }
 }

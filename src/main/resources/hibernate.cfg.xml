@@ -14,5 +14,6 @@
         <mapping class="com.zapper.testIVR.model.User"/>
         <mapping class="com.zapper.testIVR.model.Course"/>
         <mapping class="com.zapper.testIVR.model.Module"/>
+        <mapping class="com.zapper.testIVR.model.Chapter"/>
     </session-factory>
 </hibernate-configuration>
