@@ -36,6 +36,15 @@ public class Question {
     this.correctOptionNo = correctOptionNo;
   }
 
+  public Question() {
+  }
+
+  public Question(Integer questionId, Integer quizId, String questionText) {
+    this.id = questionId;
+    this.quizId = quizId;
+    this.questionText = questionText;
+  }
+
   public Integer getId() {
 
     return id;

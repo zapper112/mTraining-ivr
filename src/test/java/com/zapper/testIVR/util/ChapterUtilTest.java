@@ -17,7 +17,7 @@ public class ChapterUtilTest {
   @Test
   @Ignore
   public void testGetChaptersForModule() throws Exception {
-    List<Chapter> chapters = new ChapterUtil().getChaptersForModule(2);
+    List<Chapter> chapters = new ChapterUtil().getChaptersForModule(1);
     for(Chapter chapter : chapters) {
       System.out.println("id = " + chapter.getId());
       System.out.println("name = " + chapter.getName());

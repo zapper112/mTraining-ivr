@@ -1,5 +1,7 @@
 package com.zapper.testIVR.model;
 
+import com.zapper.testIVR.model.primaryKey.OptionPrimaryKey;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;

@@ -27,15 +27,14 @@ public class WelcomeController {
     String cid = request.getParameter("cid");
 
     if (event != null && event.toLowerCase().equals("newcall")) {
-      if(UserUtil.checkIfUserExists(cid)) {
-        UserUtil.addOrUpdateUser(new User(cid,sid));
-        return new Home().continueSession(new User(cid,sid));
+      if (UserUtil.userExists(cid)) {
+        UserUtil.addOrUpdateUser(new User(cid, sid));
+        return new Home().continueSession(new User(cid, sid));
       } else {
-        UserUtil.addOrUpdateUser(new User(cid,sid));
-        return new Home().startSession();}
-    }
-
-      else if (event != null && event.toLowerCase().equals("gotdtmf")) {
+        UserUtil.addOrUpdateUser(new User(cid, sid));
+        return new Home().startSession();
+      }
+    } else if (event != null && event.toLowerCase().equals("gotdtmf")) {
       if (request.getParameter("data").equals("1")) {
         String returnXML = new CourseUtil().startCoursesFromBeginning();
         return returnXML;
@@ -47,7 +46,6 @@ public class WelcomeController {
         response.addHangup();
       }
     }
-
     return response.getXML();
   }
 }

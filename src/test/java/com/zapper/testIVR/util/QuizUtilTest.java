@@ -4,6 +4,7 @@ import com.zapper.testIVR.model.Option;
 import com.zapper.testIVR.model.Question;
 import com.zapper.testIVR.model.Quiz;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -14,8 +15,9 @@ import java.util.List;
 public class QuizUtilTest {
 
   @Test
+  @Ignore
   public void testGetQuizzesForChapter() throws Exception {
-    List<Quiz> quizzes = new QuizUtil().getQuizzesForChapter(5);
+    List<Quiz> quizzes = new QuizUtil().getQuizzesForChapter(1);
     for(Quiz quiz : quizzes) {
       System.out.println("id = " + quiz.getId());
       System.out.println("chapterId = " + quiz.getChapterId());
@@ -24,8 +26,9 @@ public class QuizUtilTest {
   }
 
   @Test
+  @Ignore
   public void testGetAllQuestionsForQuiz() throws Exception {
-    List<Question> questions = new QuizUtil().getQuestionsForQuiz(1);
+    List<Question> questions = new QuizUtil().getQuestionsForQuiz(2);
     for(Question question : questions) {
       System.out.println("id = " + question.getId());
       System.out.println("text = " + question.getQuestionText());
@@ -35,6 +38,7 @@ public class QuizUtilTest {
   }
 
   @Test
+  @Ignore
   public void testGetOptionsForQuestion() throws Exception {
     List<Option> options = new QuizUtil().getOptionsForQuestion(1);
     for(Option option : options) {
@@ -43,4 +47,5 @@ public class QuizUtilTest {
       System.out.println("optionText = " + option.getOptionText());
     }
   }
+
 }

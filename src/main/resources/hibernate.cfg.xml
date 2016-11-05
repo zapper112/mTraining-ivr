@@ -19,5 +19,7 @@
         <mapping class="com.zapper.testIVR.model.Quiz"/>
         <mapping class="com.zapper.testIVR.model.Question"/>
         <mapping class="com.zapper.testIVR.model.Option"/>
+        <mapping class="com.zapper.testIVR.model.UserQuizProgress"/>
+        <mapping class="com.zapper.testIVR.model.UserResponse"/>
     </session-factory>
 </hibernate-configuration>

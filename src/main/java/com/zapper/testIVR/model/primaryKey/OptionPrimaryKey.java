@@ -1,4 +1,4 @@
-package com.zapper.testIVR.model;
+package com.zapper.testIVR.model.primaryKey;
 
 import java.io.ObjectInput;
 import java.io.Serializable;

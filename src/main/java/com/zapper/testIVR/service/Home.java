@@ -22,7 +22,7 @@ public class Home {
 
   public String continueSession(User user) {
     response.addPlayText("Welcome back");
-    response.addPlayText(startSession());
+    response.getXML().concat(startSession());
     response.addHangup();
     return response.getXML();
   }
