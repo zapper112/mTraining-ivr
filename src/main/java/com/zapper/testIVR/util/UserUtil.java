@@ -27,7 +27,7 @@ public class UserUtil {
 
   public static String continueQuiz(User user, String chapterId) {
     List<Integer> quizAndCompletedQuestions =  DBUtil.getQuizAndCompletedQuestions(user, chapterId);
-    Question question = DBUtil.getContinuingQuestion(quizAndCompletedQuestions);
+    Question question = DBUtil.getContinuingQuestion(null);
     List<Option> options = DBUtil.getOptionsForQuestion(question.getId());
     Response response = new Response();
     CollectDtmf cd = new CollectDtmf();

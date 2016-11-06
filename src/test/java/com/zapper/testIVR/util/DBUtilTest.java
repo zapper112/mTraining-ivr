@@ -1,6 +1,7 @@
 package com.zapper.testIVR.util;
 
 import com.zapper.testIVR.model.Course;
+import com.zapper.testIVR.model.Quiz;
 import com.zapper.testIVR.model.User;
 
 import org.junit.Ignore;
@@ -27,7 +28,7 @@ public class DBUtilTest {
   @Test
   @Ignore
   public void getLastCompleteQuiz() {
-    List<Integer> quizToStart = DBUtil.getQuizAndCompletedQuestions(new User("231313","blahblah"), "1");
+    List<Integer> quizToStart = DBUtil.getQuizAndCompletedQuestions(new User("9100571475","blahblah"), "1");
     for(Integer i : quizToStart) {
       System.out.println(i);
     }

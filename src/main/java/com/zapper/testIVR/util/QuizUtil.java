@@ -16,7 +16,7 @@ public class QuizUtil {
   }
 
   public List<Question> getQuestionsForQuiz(Integer quizId) {
-    return DBUtil.getAllQuestionsForQuiz(quizId);
+    return DBUtil.getQuestionsForQuiz(quizId);
   }
 
   public List<Option> getOptionsForQuestion(Integer questionId) {

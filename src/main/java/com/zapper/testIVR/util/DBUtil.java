@@ -58,7 +58,7 @@ public class DBUtil {
     return (List<Quiz>) criteria.list();
   }
 
-  static List<Question> getAllQuestionsForQuiz(Integer quizId) {
+  static List<Question> getQuestionsForQuiz(Integer quizId) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Question.class);
     criteria.add(Restrictions.eq("quizId", quizId));
     return (List<Question>) criteria.list();
@@ -70,6 +70,11 @@ public class DBUtil {
     return (List<Option>) criteria.list();
   }
 
+  static UserQuizProgress getUserQuizProgress(User user, String chapterId) {
+    return new UserQuizProgress();
+  }
+
+  //TODO : delete this method when done returning UQP
   static List<Integer> getQuizAndCompletedQuestions(User user, String chapterId) {
     String quizToStartQuery = UserDao.getQuizToStartQuery();
     Query query = HibernateUtil.getSession().createQuery(quizToStartQuery).
@@ -88,9 +93,10 @@ public class DBUtil {
     return quizAndCompletedQuestions;
   }
 
-  static Question getContinuingQuestion(List<Integer> quizAndCompletedQuestions) {
+  static Question getContinuingQuestion(Integer questionId) {
     Session session = HibernateUtil.getSession();
-    Question continuingQuestion = session.get(Question.class,4);
+    questionId = 2;
+    Question continuingQuestion = session.get(Question.class,questionId);
     return continuingQuestion;
   }
 
@@ -107,24 +113,23 @@ public class DBUtil {
       Object[] objects = (Object[]) it.next();
       Integer questionId = (Integer) objects[0];
       String questionText = (String) objects[1];
-      question = new Question(questionId, quizAndCompletedQuestions.get(0), questionText);
+      //question = new Question(questionId, quizAndCompletedQuestions.get(0), questionText);
     }
     return question;
   }
 
   static void saveAnswer(User user, String chapterId, String dtmf) {
-    String callerId = user.getCallerId();
-    List<Integer> quizAndCompletedQuestions = DBUtil.getQuizAndCompletedQuestions(user, chapterId);
-    Integer quizId = quizAndCompletedQuestions.get(0);
-    Integer questionsAnswered = quizAndCompletedQuestions.get(1);
-    Integer totalNumberOfQuestions = new QuizUtil().getQuestionsForQuiz(quizId).size();
+    UserQuizProgress userQuizProgress = DBUtil.getUserQuizProgress(user, chapterId);
+    Quiz quiz = userQuizProgress.getQuiz();
+    Integer questionsAnswered = userQuizProgress.getQuestionsAnswered();
+    Integer totalNumberOfQuestions = getQuestionsForQuiz(quiz.getId()).size();
     Boolean quizCompleted = (questionsAnswered + 1 == totalNumberOfQuestions);
     UserQuizProgress
         uqp =
-        new UserQuizProgress(callerId, quizId, questionsAnswered + 1, quizCompleted);
+        new UserQuizProgress(user, quiz, questionsAnswered + 1, quizCompleted);
     UserResponse
         ur =
-        new UserResponse(callerId, 2, Integer.valueOf(dtmf),
+        new UserResponse(user, new Question(), Integer.valueOf(dtmf),
             null);  //TODO : store the correct question id in user response, timestamp taken care of in database
     UserDao.saveUserFeedback(uqp);
     UserDao.saveUserFeedback(ur);

@@ -20,7 +20,7 @@ public class QuizUtilTest {
     List<Quiz> quizzes = new QuizUtil().getQuizzesForChapter(1);
     for(Quiz quiz : quizzes) {
       System.out.println("id = " + quiz.getId());
-      System.out.println("chapterId = " + quiz.getChapterId());
+      System.out.println("chapterId = " + quiz.getChapter().getId());
       System.out.println("numberOfQuestions = " + quiz.getNumberOfQuestions());
     }
   }
@@ -33,7 +33,7 @@ public class QuizUtilTest {
       System.out.println("id = " + question.getId());
       System.out.println("text = " + question.getQuestionText());
       System.out.println("correctOption = " + question.getCorrectOptionNo());
-      System.out.println("quizId = " + question.getQuizId());
+      System.out.println("quizId = " + question.getQuiz().getId());
     }
   }
 

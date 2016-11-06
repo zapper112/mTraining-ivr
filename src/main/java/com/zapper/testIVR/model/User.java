@@ -12,11 +12,8 @@ import javax.persistence.Table;
 @Table(name = "user")
 public class User {
 
-  @Id
-  @Column(name = "callerId")
   private String callerId;
 
-  @Column(name = "sessionId")
   private String sessionId;
 
   public User() {
@@ -31,6 +28,8 @@ public class User {
     this.callerId = callerId;
   }
 
+  @Id
+  @Column(name = "callerId")
   public String getCallerId() {
     return this.callerId;
   }
@@ -38,7 +37,8 @@ public class User {
   public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
   }
-  
+
+  @Column(name = "sessionId")
   public String getSessionId () {
     return this.sessionId;
   }

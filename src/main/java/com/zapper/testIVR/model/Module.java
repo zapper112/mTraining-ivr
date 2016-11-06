@@ -1,9 +1,13 @@
 package com.zapper.testIVR.model;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -13,36 +17,47 @@ import javax.persistence.Table;
 @Table(name = "module")
 public class Module {
 
-  @Id
-  @Column(name = "id")
-  private Integer Id;
+  private Integer id;
 
-  @Column(name = "name")
   private String name;
 
-  @Column(name = "course_id")
-  private Integer courseId;
+  private Course course;
 
   public Module() {
   }
 
-  public Module(Integer id, String name, Integer courseId) {
-
-    Id = id;
+  public Module(Integer id, String name, Course course) {
+    this.id = id;
     this.name = name;
-    this.courseId = courseId;
+    this.course = course;
   }
 
+  @Column(name = "name")
   public String getName() {
-
     return name;
   }
 
+  @Id
+  @Column(name = "id")
   public Integer getId() {
-    return Id;
+    return id;
   }
 
-  public Integer getCourseId() {
-    return courseId;
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setCourse(Course course) {
+    this.course = course;
+  }
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "course_id")
+  public Course getCourse() {
+    return course;
   }
 }

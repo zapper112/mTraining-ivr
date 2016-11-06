@@ -12,30 +12,29 @@ import javax.persistence.Table;
 @Table(name = "course")
 public class Course {
 
-  @Id
-  @Column(name = "id")
-  private Integer Id;
+  private Integer id;
 
-  @Column(name = "name")
   private String name;
 
   public Course() {
   }
 
   public Course(Integer id, String name) {
-    this.Id = id;
+    this.id = id;
     this.name = name;
   }
 
+  @Id
+  @Column(name = "id")
   public Integer getId() {
-
-    return Id;
+    return id;
   }
 
   public void setId(Integer id) {
-    Id = id;
+    this.id = id;
   }
 
+  @Column(name = "name")
   public String getName() {
     return name;
   }

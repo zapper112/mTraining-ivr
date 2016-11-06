@@ -1,5 +1,7 @@
 package com.zapper.testIVR.dao;
 
+import com.zapper.testIVR.model.Question;
+import com.zapper.testIVR.model.Quiz;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.model.UserQuizProgress;
 import com.zapper.testIVR.model.UserResponse;
@@ -12,7 +14,8 @@ import org.junit.Test;
  */
 public class UserDaoTest {
 
-  UserDao userDao;
+  private UserDao userDao;
+  private User user;
 
   @Test
   @Ignore
@@ -34,15 +37,16 @@ public class UserDaoTest {
   @Test
   @Ignore
   public void testUserResponseSave() {
-    UserResponse ur = new UserResponse("940",1,4, null);
+    UserResponse ur = new UserResponse(new User(), new Question(),4, null);
     UserDao.saveUserResponse(ur);
   }
 
   @Test
   @Ignore
   public void testSaveUserFeedback() {
-    UserResponse userResponse = new UserResponse("90",2,4,null);
-    UserQuizProgress userQuizProgress = new UserQuizProgress("90",1,4,true);
+    user = new User("667788","2498241");
+    UserResponse userResponse = new UserResponse(new User(),new Question(),4,null);
+    UserQuizProgress userQuizProgress = new UserQuizProgress(user,new Quiz(1,null,4),4,true);
     UserDao.saveUserFeedback(userQuizProgress);
   }
 

@@ -1,8 +1,11 @@
 package com.zapper.testIVR.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -12,35 +15,47 @@ import javax.persistence.Table;
 @Table(name = "message")
 public class Message {
 
-  @Id
-  @Column(name = "id")
-  private Integer Id;
+  private Integer id;
 
-  @Column(name = "content")
   private String content;
 
-  @Column(name = "chapter_id")
-  private Integer chapterId;
+  private Chapter chapter;
 
   public Message() {
   }
 
-  public Message(Integer id, String content, Integer chapterId) {
-    this.Id = id;
-    this.chapterId = chapterId;
+  public Message(Integer id, String content, Chapter chapter) {
+    this.id = id;
     this.content = content;
+    this.chapter = chapter;
   }
 
-  public Integer getChapterId() {
-
-    return chapterId;
+  @Id
+  @Column(name = "id")
+  public Integer getId() {
+    return id;
   }
 
+  @Column(name = "content")
   public String getContent() {
     return content;
   }
 
-  public Integer getId() {
-    return Id;
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public void setChapter(Chapter chapter) {
+    this.chapter = chapter;
+  }
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "chapter_id")
+  public Chapter getChapter() {
+    return chapter;
   }
 }

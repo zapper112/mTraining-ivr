@@ -21,7 +21,7 @@ public class ChapterUtilTest {
     for(Chapter chapter : chapters) {
       System.out.println("id = " + chapter.getId());
       System.out.println("name = " + chapter.getName());
-      System.out.println("moduleId = " + chapter.getModuleId());
+      System.out.println("moduleId = " + chapter.getModule().getId());
     }
   }
 }

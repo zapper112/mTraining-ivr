@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -20,8 +22,9 @@ public class Question {
   @Column(name = "id")
   private Integer id;
 
-  @Column(name = "quiz_id")
-  private Integer quizId;
+  @ManyToOne
+  @JoinColumn(name = "quiz_id")
+  private Quiz quiz;
 
   @Column(name = "question_text")
   private String questionText;
@@ -29,20 +32,19 @@ public class Question {
   @Column(name = "correct_option_no")
   private Integer correctOptionNo;
 
-  public Question(Integer id, Integer quizId, String questionText, Integer correctOptionNo) {
+  public Question() {
+  }
+
+  public Question(Integer id, Quiz quiz, String questionText, Integer correctOptionNo) {
+
     this.id = id;
-    this.quizId = quizId;
+    this.quiz = quiz;
     this.questionText = questionText;
     this.correctOptionNo = correctOptionNo;
   }
 
-  public Question() {
-  }
-
-  public Question(Integer questionId, Integer quizId, String questionText) {
-    this.id = questionId;
-    this.quizId = quizId;
-    this.questionText = questionText;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public Integer getId() {
@@ -50,8 +52,20 @@ public class Question {
     return id;
   }
 
-  public Integer getQuizId() {
-    return quizId;
+  public void setQuiz(Quiz quiz) {
+    this.quiz = quiz;
+  }
+
+  public void setQuestionText(String questionText) {
+    this.questionText = questionText;
+  }
+
+  public void setCorrectOptionNo(Integer correctOptionNo) {
+    this.correctOptionNo = correctOptionNo;
+  }
+
+  public Quiz getQuiz() {
+    return quiz;
   }
 
   public String getQuestionText() {

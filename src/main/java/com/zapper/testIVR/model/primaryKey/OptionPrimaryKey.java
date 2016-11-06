@@ -1,5 +1,8 @@
 package com.zapper.testIVR.model.primaryKey;
 
+import com.zapper.testIVR.model.Question;
+import com.zapper.testIVR.model.Quiz;
+
 import java.io.ObjectInput;
 import java.io.Serializable;
 
@@ -10,13 +13,12 @@ public class OptionPrimaryKey implements Serializable {
 
   private Integer optionNo;
 
-  private Integer questionId;
+  private Question question;
 
   public OptionPrimaryKey() {};
 
-  public OptionPrimaryKey(Integer optionNo, Integer questionId) {
+  public OptionPrimaryKey(Integer optionNo, Question question) {
     this.optionNo = optionNo;
-    this.questionId = questionId;
+    this.question = question;
   }
-
 }

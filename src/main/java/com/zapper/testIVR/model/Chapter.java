@@ -1,8 +1,13 @@
 package com.zapper.testIVR.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.swing.*;
 
@@ -13,34 +18,47 @@ import javax.swing.*;
 @Table(name="chapter")
 public class Chapter {
 
-  @Id
-  @Column(name="id")
-  private Integer Id;
+  private Integer id;
 
-  @Column(name="name")
   private String name;
 
-  @Column(name="module_id")
-  private Integer moduleId;
+  private Module module;
 
   public Chapter() {};
 
-  public Integer getId() {
-    return this.Id;
+  public Chapter(Integer id, String name, Module module) {
+    this.id = id;
+    this.name = name;
+    this.module = module;
   }
 
+  @Id
+  @Column(name="id")
+  public Integer getId() {
+    return id;
+  }
+
+  @Column(name="name")
   public String getName() {
     return name;
   }
 
-  public Chapter(Integer id, String name, Integer moduleId) {
-    this.Id = id;
-    this.name = name;
-    this.moduleId = moduleId;
+  public void setModule(Module module) {
+    this.module = module;
   }
 
-  public Integer getModuleId() {
-    return moduleId;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name="module_id")
+  public Module getModule() {
+    return module;
   }
 
 }

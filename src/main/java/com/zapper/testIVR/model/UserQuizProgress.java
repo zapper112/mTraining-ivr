@@ -1,65 +1,93 @@
 package com.zapper.testIVR.model;
 
-import com.zapper.testIVR.model.primaryKey.UserQuizProgressPrimaryKey;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
  * Created by Satyarth on 3/11/16.
  */
 @Entity
-@IdClass(UserQuizProgressPrimaryKey.class)
 @Table(name = "user_quiz_progress")
-public class UserQuizProgress extends UserFeedback{
+public class UserQuizProgress extends UserFeedback {
 
-  @Id
-  @Column(name = "user_id")
-  private String callerId;
+  private Integer id;
 
-  @Id
-  @Column(name = "quiz_id")
-  private Integer quizId;
+  private User user;
 
-  @Column(name = "questions_answered")
+  private Quiz quiz;
+
   private Integer questionsAnswered;
 
-  @Column(name = "quiz_completed")
   private Boolean quizCompleted;
-
-  public String getCallerId() {
-    return callerId;
-  }
-
-  public Integer getQuizId() {
-    return quizId;
-  }
-
-  public Integer getQuestionsAnswered() {
-    return questionsAnswered;
-  }
-
-  public Boolean getQuizCompleted() {
-    return quizCompleted;
-  }
 
   public UserQuizProgress() {
   }
 
-  public UserQuizProgress(String callerId, Integer quizId, Integer questionsAnswered,
+  public UserQuizProgress(User user, Quiz quiz, Integer questionsAnswered) {
+    this.user = user;
+    this.quiz = quiz;
+    this.questionsAnswered = questionsAnswered;
+  }
+
+  public UserQuizProgress(User user, Quiz quiz, Integer questionsAnswered,
                           Boolean quizCompleted) {
-    this.callerId = callerId;
-    this.quizId = quizId;
+    this.user = user;
+    this.quiz = quiz;
     this.questionsAnswered = questionsAnswered;
     this.quizCompleted = quizCompleted;
   }
 
-  public UserQuizProgress(String callerId, Integer quizId, Integer questionsAnswered) {
-    this.callerId = callerId;
-    this.quizId = quizId;
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setQuiz(Quiz quiz) {
+    this.quiz = quiz;
+  }
+
+  public void setQuestionsAnswered(Integer questionsAnswered) {
     this.questionsAnswered = questionsAnswered;
+  }
+
+  public void setQuizCompleted(Boolean quizCompleted) {
+    this.quizCompleted = quizCompleted;
+  }
+
+  public void setId(Integer id) {
+
+    this.id = id;
+  }
+
+  @Id
+  @Column(name = "id")
+  public Integer getId() {
+    return id;
+  }
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id")
+  public User getUser() {
+    return user;
+  }
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "quiz_id")
+  public Quiz getQuiz() {
+    return quiz;
+  }
+
+  @Column(name = "questions_answered")
+  public Integer getQuestionsAnswered() {
+    return questionsAnswered;
+  }
+
+  @Column(name = "quiz_completed")
+  public Boolean getQuizCompleted() {
+    return quizCompleted;
   }
 }

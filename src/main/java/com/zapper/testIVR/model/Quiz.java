@@ -2,9 +2,12 @@ package com.zapper.testIVR.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -14,35 +17,50 @@ import javax.persistence.Table;
 @Table(name = "quiz")
 public class Quiz {
 
-  @Id
-  @Column(name = "id")
   private Integer id;
 
-  @Column(name = "chapter_id")
-  private Integer chapterId;
+  private Chapter chapter;
 
-  @Column(name = "no_of_questions")
   private Integer numberOfQuestions;
 
   public Quiz() {
   }
 
-  public Quiz(Integer id, Integer chapterId, Integer numberOfQuestions) {
+  public Quiz(Integer id, Chapter chapter, Integer numberOfQuestions) {
     this.id = id;
-    this.chapterId = chapterId;
+    this.chapter = chapter;
     this.numberOfQuestions = numberOfQuestions;
   }
 
-  public Integer getNumberOfQuestions() {
-    return numberOfQuestions;
-  }
-
+  @Id
+  @Column(name = "id")
   public Integer getId() {
     return id;
   }
 
-  public Integer getChapterId() {
-    return chapterId;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "chapter_id")
+  public Chapter getChapter() {
+    return chapter;
   }
 
+  public void setChapter(Chapter chapter) {
+    this.chapter = chapter;
+  }
+
+  public void setNumberOfQuestions(Integer numberOfQuestions) {
+    this.numberOfQuestions = numberOfQuestions;
+  }
+
+  public void setId(Integer id) {
+
+    this.id = id;
+  }
+
+  @Column(name = "no_of_questions")
+
+  public Integer getNumberOfQuestions() {
+    return numberOfQuestions;
+  }
 }

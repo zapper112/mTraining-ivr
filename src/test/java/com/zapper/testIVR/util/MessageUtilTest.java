@@ -21,7 +21,7 @@ public class MessageUtilTest {
     for (Message message : messages) {
       System.out.println("Id = " + message.getId());
       System.out.println("Content = " + message.getContent());
-      System.out.println("ChapterId = " + message.getChapterId());
+      System.out.println("ChapterId = " + message.getChapter().getId());
     }
   }
 }
