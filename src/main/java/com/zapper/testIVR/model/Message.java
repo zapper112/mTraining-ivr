@@ -41,7 +41,12 @@ public class Message {
     return content;
   }
 
+  public Message(Integer id) {
+    this.id = id;
+  }
+
   public void setId(Integer id) {
+
     this.id = id;
   }
 
@@ -53,7 +58,7 @@ public class Message {
     this.chapter = chapter;
   }
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "chapter_id")
   public Chapter getChapter() {
     return chapter;

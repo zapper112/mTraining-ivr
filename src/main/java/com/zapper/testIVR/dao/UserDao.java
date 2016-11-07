@@ -42,42 +42,17 @@ public class UserDao {
     return retrievedUser;
   }
 
-  public static String getQuizToStartQuery() {
-    return "select coalesce(min(UQP.quizId),0) as quizToStart,\n"
-        + "coalesce(UQP.questionsAnswered, 0) as questionsAnswered\n"
-        + "from UserQuizProgress UQP\n"
-        + "inner join Quiz Q\n"
-        + "on UQP.quizId = Q.id\n"
-        + "and Q.chapterId = :chapterId\n"
-        + "where UQP.callerId = :callerId\n"
-        + "and UQP.quizCompleted = false\n";
-  }
 
-  public static String getContinuingQuestionQuery() {
-    return "select Q.id as questionId, Q.questionText as questionText \n"
-        + "from Question Q\n"
-        + "where Q.quizId = :quizToStart\n"
-        + "order by Q.id\n";
-  }
-
-  public static void saveUserQuizProgress(UserQuizProgress uqp) {
+  public static void saveUserQuizProgress(UserQuizProgress updatedUQP, UserQuizProgress outdatedUQP) {
     session = HibernateUtil.getSession();
     Transaction transaction = session.beginTransaction();
-    session.saveOrUpdate(uqp);
+    session.delete(outdatedUQP);
+    session.saveOrUpdate(updatedUQP);
     transaction.commit();
     session.close();
   }
 
-  public static void saveUserResponse(UserResponse ur) {
-    session = HibernateUtil.getSession();
-    Transaction transaction = session.beginTransaction();
-    session.saveOrUpdate(ur);
-    transaction.commit();
-    session.close();
-  }
-
-  public static void saveUserFeedback(UserFeedback feedback) {
-    Class instanceClass = feedback.getClass();
+  public static void saveUserResponse(UserResponse feedback) {
     session = HibernateUtil.getSession();
     Transaction transaction = session.beginTransaction();
     session.saveOrUpdate(feedback);

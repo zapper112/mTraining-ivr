@@ -5,6 +5,8 @@ import java.security.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -39,6 +41,7 @@ public class UserResponse extends UserFeedback {
   }
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
   public Integer getId() {
     return id;
@@ -49,8 +52,8 @@ public class UserResponse extends UserFeedback {
     this.id = id;
   }
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "caller_id")
+  @ManyToOne
+  @JoinColumn(name = "callerId")
   public User getUser() {
     return user;
   }
@@ -59,8 +62,8 @@ public class UserResponse extends UserFeedback {
     this.user = user;
   }
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "question_id")
+  @ManyToOne
+  @JoinColumn(name = "questionId")
   public Question getQuestion() {
     return question;
   }
@@ -69,7 +72,7 @@ public class UserResponse extends UserFeedback {
     this.question = question;
   }
 
-  @Column(name = "option_no")
+  @Column(name = "optionNo")
   public Integer getOptionNo() {
     return optionNo;
   }
@@ -78,7 +81,7 @@ public class UserResponse extends UserFeedback {
     this.optionNo = optionNo;
   }
 
-  @Column(name = "time_of_answer")
+  @Column(name = "timeOfAnswer")
   public Timestamp getTimeOfAnswer() {
     return timeOfAnswer;
   }

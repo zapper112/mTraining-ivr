@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,6 +33,10 @@ public class Question {
   @Column(name = "correct_option_no")
   private Integer correctOptionNo;
 
+  public Question(Integer id) {
+    this.id = id;
+  }
+
   public Question() {
   }
 
@@ -48,7 +53,6 @@ public class Question {
   }
 
   public Integer getId() {
-
     return id;
   }
 

@@ -39,7 +39,7 @@ public class Quiz {
   }
 
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "chapter_id")
   public Chapter getChapter() {
     return chapter;
@@ -53,13 +53,16 @@ public class Quiz {
     this.numberOfQuestions = numberOfQuestions;
   }
 
+  public Quiz(Integer id) {
+    this.id = id;
+  }
+
   public void setId(Integer id) {
 
     this.id = id;
   }
 
   @Column(name = "no_of_questions")
-
   public Integer getNumberOfQuestions() {
     return numberOfQuestions;
   }

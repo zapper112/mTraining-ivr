@@ -1,5 +1,6 @@
 package com.zapper.testIVR.util;
 
+import com.zapper.testIVR.model.Course;
 import com.zapper.testIVR.model.Module;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public class ModuleUtil {
 
-  public List<Module> getAllModulesForCourse(Integer courseId) {
-    return DBUtil.getAllModulesForCourse(courseId);
+  public List<Module> getAllModulesForCourse(Course course) {
+    return DBUtil.getAllModulesForCourse(course);
   }
 }

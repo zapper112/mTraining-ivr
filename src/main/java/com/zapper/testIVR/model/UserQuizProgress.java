@@ -3,6 +3,8 @@ package com.zapper.testIVR.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -64,29 +66,30 @@ public class UserQuizProgress extends UserFeedback {
   }
 
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
   public Integer getId() {
     return id;
   }
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "user_id")
+  @ManyToOne
+  @JoinColumn(name = "callerId")
   public User getUser() {
     return user;
   }
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "quiz_id")
+  @ManyToOne
+  @JoinColumn(name = "quizId")
   public Quiz getQuiz() {
     return quiz;
   }
 
-  @Column(name = "questions_answered")
+  @Column(name = "completedQuestions")
   public Integer getQuestionsAnswered() {
     return questionsAnswered;
   }
 
-  @Column(name = "quiz_completed")
+  @Column(name = "quizCompleted")
   public Boolean getQuizCompleted() {
     return quizCompleted;
   }

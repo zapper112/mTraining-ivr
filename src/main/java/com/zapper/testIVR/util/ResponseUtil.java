@@ -20,7 +20,7 @@ public class ResponseUtil {
     for(int i = 0 ; i < modules.size(); i++) {
       response.addPlayText("Module number - " + (i + 1));
       response.addPlayText(modules.get(i).getName());
-      List<Chapter> chaptersInModule = new ChapterUtil().getChaptersForModule(modules.get(i).getId());
+      List<Chapter> chaptersInModule = new ChapterUtil().getChaptersForModule(modules.get(i));
       addChaptersInModule(response, chaptersInModule);
     }
   }
@@ -29,8 +29,8 @@ public class ResponseUtil {
     for(int i = 0; i < chapters.size(); i++) {
       response.addPlayText("Chapter number - " + (i + 1));
       response.addPlayText(chapters.get(i).getName());
-      List<Message> messagesForChapter = new MessageUtil().getMessagesForChapter(chapters.get(i).getId());
-      List<Quiz> quizzesForChapter = new QuizUtil().getQuizzesForChapter(chapters.get(i).getId());
+      List<Message> messagesForChapter = new MessageUtil().getMessagesForChapter(chapters.get(i));
+      List<Quiz> quizzesForChapter = new QuizUtil().getQuizzesForChapter(chapters.get(i));
       ResponseUtil.addMessagesInChapter(response, messagesForChapter);
       ResponseUtil.addQuizzesInChapter(response, quizzesForChapter);
     }
@@ -47,12 +47,12 @@ public class ResponseUtil {
   }
 
   private static void addQuizInChapter(Response response, Quiz quiz) {
-    List<Question> questions = new QuizUtil().getQuestionsForQuiz(quiz.getId());
+    List<Question> questions = new QuizUtil().getQuestionsForQuiz(quiz);
     for(Question question : questions) addQuestionInQuiz(response, question);
   }
 
   private static void addQuestionInQuiz(Response response, Question question) {
-    List<Option> options = new QuizUtil().getOptionsForQuestion(question.getId());
+    List<Option> options = new QuizUtil().getOptionsForQuestion(question);
     CollectDtmf cd = new CollectDtmf();
     cd.addPlayText(question.getQuestionText());
     for(Option option : options) {

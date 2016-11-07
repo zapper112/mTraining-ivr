@@ -1,5 +1,6 @@
 package com.zapper.testIVR.util;
 
+import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.Message;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public class MessageUtil {
 
-  public List<Message> getMessagesForChapter(Integer chapterId) {
-    return DBUtil.getMessagesForChapter(chapterId);
+  public List<Message> getMessagesForChapter(Chapter chapter) {
+    return DBUtil.getMessagesForChapter(chapter);
   }
 }

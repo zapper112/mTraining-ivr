@@ -18,7 +18,7 @@ public class ModuleUtilTest {
   @Test
   @Ignore
   public void testGetAllModulesForCourse() throws Exception {
-    List<Module> modules = new ModuleUtil().getAllModulesForCourse(1);
+    List<Module> modules = new ModuleUtil().getAllModulesForCourse(new Course(1));
     for (Module m : modules) {
       System.out.println("ID = " + m.getId());
       System.out.println("name = " + m.getName());

@@ -38,7 +38,12 @@ public class User {
     this.sessionId = sessionId;
   }
 
+  public User(String callerId) {
+    this.callerId = callerId;
+  }
+
   @Column(name = "sessionId")
+
   public String getSessionId () {
     return this.sessionId;
   }

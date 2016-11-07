@@ -32,9 +32,14 @@ public class Module {
     this.course = course;
   }
 
+  public Module(Integer id) {
+    this.id = id;
+  }
+
   @Column(name = "name")
   public String getName() {
     return name;
+
   }
 
   @Id
@@ -55,7 +60,7 @@ public class Module {
     this.course = course;
   }
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "course_id")
   public Course getCourse() {
     return course;

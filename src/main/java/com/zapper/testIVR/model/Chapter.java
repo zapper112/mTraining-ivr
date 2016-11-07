@@ -43,7 +43,12 @@ public class Chapter {
     return name;
   }
 
+  public Chapter(Integer id) {
+    this.id = id;
+  }
+
   public void setModule(Module module) {
+
     this.module = module;
   }
 
@@ -55,7 +60,7 @@ public class Chapter {
     this.id = id;
   }
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name="module_id")
   public Module getModule() {
     return module;

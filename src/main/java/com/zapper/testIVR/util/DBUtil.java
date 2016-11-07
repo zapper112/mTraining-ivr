@@ -16,6 +16,8 @@ import com.zapper.testIVR.model.UserResponse;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
@@ -34,105 +36,112 @@ public class DBUtil {
     return (List<Course>) criteria.list();
   }
 
-  static List<Module> getAllModulesForCourse(Integer courseId) {
+  static List<Module> getAllModulesForCourse(Course course) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Module.class)
-        .add(Restrictions.eq("courseId", courseId));
+        .add(Restrictions.eq("course", course));
     return (List<Module>) criteria.list();
   }
 
-  static List<Chapter> getChaptersForModule(Integer moduleId) {
+  static List<Chapter> getChaptersForModule(Module module) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Chapter.class)
-        .add(Restrictions.eq("moduleId", moduleId));
+        .add(Restrictions.eq("module",module));
     return (List<Chapter>) criteria.list();
   }
 
-  static List<Message> getMessagesForChapter(Integer chapterId) {
+  static List<Message> getMessagesForChapter(Chapter chapter) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Message.class)
-        .add(Restrictions.eq("chapterId", chapterId));
+        .add(Restrictions.eq("chapter", chapter));
     return (List<Message>) criteria.list();
   }
 
-  static List<Quiz> getQuizzesForChapter(Integer chapterId) {
+  static List<Quiz> getQuizzesForChapter(Chapter chapter) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Quiz.class)
-        .add(Restrictions.eq("chapterId", chapterId));
+        .add(Restrictions.eq("chapter", chapter));
     return (List<Quiz>) criteria.list();
   }
 
-  static List<Question> getQuestionsForQuiz(Integer quizId) {
+  static List<Question> getQuestionsForQuiz(Quiz quiz) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Question.class);
-    criteria.add(Restrictions.eq("quizId", quizId));
+    criteria.add(Restrictions.eq("quiz", quiz));
     return (List<Question>) criteria.list();
   }
 
-  static List<Option> getOptionsForQuestion(Integer questionId) {
+  static List<Option> getOptionsForQuestion(Question question) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Option.class)
-        .add(Restrictions.eq("questionId", questionId));
+        .add(Restrictions.eq("question", question));
     return (List<Option>) criteria.list();
   }
 
-  static UserQuizProgress getUserQuizProgress(User user, String chapterId) {
-    return new UserQuizProgress();
-  }
-
-  //TODO : delete this method when done returning UQP
-  static List<Integer> getQuizAndCompletedQuestions(User user, String chapterId) {
-    String quizToStartQuery = UserDao.getQuizToStartQuery();
-    Query query = HibernateUtil.getSession().createQuery(quizToStartQuery).
-        setString("callerId", user.getCallerId()).
-        setString("chapterId", chapterId);
-    List results = query.list();
-    Iterator it = results.iterator();
-    List<Integer> quizAndCompletedQuestions = new ArrayList<Integer>(2);
-    while (it.hasNext()) {
-      Object[] objects = (Object[]) it.next();
-      Integer quizToStart = (Integer) objects[0];
-      Integer completedQuestions = (Integer) objects[1];
-      quizAndCompletedQuestions.add(quizToStart);
-      quizAndCompletedQuestions.add(completedQuestions);
+  static UserQuizProgress getUserQuizProgress(User user, Chapter chapter) {
+    if(!recordPresentInUQP(user, chapter)) {
+      createNewUQP(user,chapter);
     }
-    return quizAndCompletedQuestions;
+    Criteria criteria = HibernateUtil.getSession().createCriteria(UserQuizProgress.class)
+        .add(Restrictions.eq("user",user))
+        .add(Restrictions.eq("quizCompleted",false));
+    criteria.createAlias("quiz","uq")
+        .add(Restrictions.eq("uq.chapter",chapter));
+    List<UserQuizProgress> results = (List<UserQuizProgress>) criteria.list();
+    if(results.size() == 0) {
+      //This means that the user has already completed all the quizzes
+      return null;
+    }
+    return results.get(0);
   }
 
-  static Question getContinuingQuestion(Integer questionId) {
-    Session session = HibernateUtil.getSession();
-    questionId = 2;
-    Question continuingQuestion = session.get(Question.class,questionId);
-    return continuingQuestion;
-  }
-
-  static Question getContinuingQuestionOld(List<Integer> quizAndCompletedQuestions) {
-    String continuingQuestionQuery = UserDao.getContinuingQuestionQuery();
-    Query query = HibernateUtil.getSession().createQuery(continuingQuestionQuery)
-        .setParameter("quizToStart", quizAndCompletedQuestions.get(0))
-        .setFirstResult(quizAndCompletedQuestions.get(1))
+  static Question getContinuingQuestion(UserQuizProgress uqp) {
+    Criteria criteria = HibernateUtil.getSession().createCriteria(Question.class)
+        .add(Restrictions.eq("quiz",uqp.getQuiz()))
+        .addOrder(Order.asc("id"))
+        .setFirstResult(uqp.getQuestionsAnswered())
         .setMaxResults(1);
-    List<Question> results = query.list();
-    Iterator it = results.iterator();
-    Question question = null;
-    while (it.hasNext()) {
-      Object[] objects = (Object[]) it.next();
-      Integer questionId = (Integer) objects[0];
-      String questionText = (String) objects[1];
-      //question = new Question(questionId, quizAndCompletedQuestions.get(0), questionText);
-    }
-    return question;
+    List<Question> results = (List<Question>) criteria.list();
+    return results.get(0);
   }
 
-  static void saveAnswer(User user, String chapterId, String dtmf) {
-    UserQuizProgress userQuizProgress = DBUtil.getUserQuizProgress(user, chapterId);
+  static void saveAnswer(User user, Chapter chapter, String dtmf) {
+    UserQuizProgress userQuizProgress = DBUtil.getUserQuizProgress(user, chapter);
     Quiz quiz = userQuizProgress.getQuiz();
     Integer questionsAnswered = userQuizProgress.getQuestionsAnswered();
-    Integer totalNumberOfQuestions = getQuestionsForQuiz(quiz.getId()).size();
+    Integer totalNumberOfQuestions = getQuestionsForQuiz(quiz).size();
     Boolean quizCompleted = (questionsAnswered + 1 == totalNumberOfQuestions);
+    Question question = getContinuingQuestion(userQuizProgress);
     UserQuizProgress
         uqp =
         new UserQuizProgress(user, quiz, questionsAnswered + 1, quizCompleted);
     UserResponse
         ur =
-        new UserResponse(user, new Question(), Integer.valueOf(dtmf),
+        new UserResponse(user, question, Integer.valueOf(dtmf),
             null);  //TODO : store the correct question id in user response, timestamp taken care of in database
-    UserDao.saveUserFeedback(uqp);
-    UserDao.saveUserFeedback(ur);
+    UserDao.saveUserQuizProgress(uqp, userQuizProgress);
+    UserDao.saveUserResponse(ur);
   }
 
+  private static Boolean recordPresentInUQP(User user, Chapter chapter) {
+    Criteria criteria = HibernateUtil.getSession().createCriteria(UserQuizProgress.class)
+        .add(Restrictions.eq("user", user))
+        .createAlias("quiz","q")
+        .add(Restrictions.eq("q.chapter",chapter));
+    List results = criteria.list();
+    return (results.size() >= 1);
+  }
+
+  private static void createNewUQP(User user, Chapter chapter) {
+    Quiz quiz = getFirstQuizInChapter(chapter);
+    UserQuizProgress uqp = new UserQuizProgress(user,quiz,0,false);
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    session.save(uqp);
+    tx.commit();
+    session.close();
+  }
+
+  public static Quiz getFirstQuizInChapter(Chapter chapter) {
+    Criteria criteria = HibernateUtil.getSession().createCriteria(Quiz.class)
+        .add(Restrictions.eq("chapter",chapter))
+        .addOrder(Order.asc("id"))
+        .setMaxResults(1);
+    List<Quiz> results = (List<Quiz>) criteria.list();
+    return (results.size() > 0) ? results.get(0) : null;
+  }
 }

@@ -1,6 +1,7 @@
 package com.zapper.testIVR.util;
 
 import com.zapper.testIVR.model.Chapter;
+import com.zapper.testIVR.model.Module;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public class ChapterUtil {
 
-  public List<Chapter> getChaptersForModule(Integer moduleId) {
-    return DBUtil.getChaptersForModule(moduleId);
+  public List<Chapter> getChaptersForModule(Module module) {
+    return DBUtil.getChaptersForModule(module);
   }
 }

@@ -56,7 +56,7 @@ public class Option implements Serializable{
     this.optionText = optionText;
   }
 
-  public Question getQuestionId() {
+  public Question getQuestion() {
     return question;
   }
 

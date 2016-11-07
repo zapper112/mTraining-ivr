@@ -36,18 +36,11 @@ public class UserDaoTest {
 
   @Test
   @Ignore
-  public void testUserResponseSave() {
-    UserResponse ur = new UserResponse(new User(), new Question(),4, null);
-    UserDao.saveUserResponse(ur);
-  }
-
-  @Test
-  @Ignore
-  public void testSaveUserFeedback() {
-    user = new User("667788","2498241");
-    UserResponse userResponse = new UserResponse(new User(),new Question(),4,null);
-    UserQuizProgress userQuizProgress = new UserQuizProgress(user,new Quiz(1,null,4),4,true);
-    UserDao.saveUserFeedback(userQuizProgress);
+  public void testSaveUserQuizFeedback() {
+    user = new User("23413","2498241");
+    UserQuizProgress userQuizProgressOld = new UserQuizProgress(user,new Quiz(1,null,4),3,false);
+    UserQuizProgress userQuizProgressNew = new UserQuizProgress(user,new Quiz(1,null,4),4,true);
+    UserDao.saveUserQuizProgress(userQuizProgressNew, userQuizProgressOld);
   }
 
 }

@@ -39,6 +39,10 @@ public class Course {
     return name;
   }
 
+  public Course(Integer id) {
+    this.id = id;
+  }
+
   public void setName(String name) {
     this.name = name;
   }

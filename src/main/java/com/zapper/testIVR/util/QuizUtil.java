@@ -1,5 +1,6 @@
 package com.zapper.testIVR.util;
 
+import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.Option;
 import com.zapper.testIVR.model.Question;
 import com.zapper.testIVR.model.Quiz;
@@ -11,16 +12,16 @@ import java.util.List;
  */
 public class QuizUtil {
 
-  public List<Quiz> getQuizzesForChapter(Integer chapterId) {
-    return DBUtil.getQuizzesForChapter(chapterId);
+  public List<Quiz> getQuizzesForChapter(Chapter chapter) {
+    return DBUtil.getQuizzesForChapter(chapter);
   }
 
-  public List<Question> getQuestionsForQuiz(Integer quizId) {
-    return DBUtil.getQuestionsForQuiz(quizId);
+  public List<Question> getQuestionsForQuiz(Quiz quiz) {
+    return DBUtil.getQuestionsForQuiz(quiz);
   }
 
-  public List<Option> getOptionsForQuestion(Integer questionId) {
-    return DBUtil.getOptionsForQuestion(questionId);
+  public List<Option> getOptionsForQuestion(Question question) {
+    return DBUtil.getOptionsForQuestion(question);
   }
 }
 

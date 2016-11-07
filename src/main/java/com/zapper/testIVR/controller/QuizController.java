@@ -1,6 +1,7 @@
 package com.zapper.testIVR.controller;
 
 import com.zapper.testIVR.kookooJava.Response;
+import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.util.UserUtil;
 
@@ -24,15 +25,16 @@ public class QuizController {
   @ResponseBody
    public String startQuizService(HttpServletRequest request) {
     String quizAction = request.getParameter("quizAction");
-    String chapterNo = request.getParameter("chapterNo");
+    //String chapterNo = request.getParameter("chapterNo");
+    Chapter chapter = new Chapter(Integer.valueOf("1"));
     String dtmf = request.getParameter("data");
     callerId = request.getParameter("cid");
     sessionId = request.getParameter("sid");
     currentUser = new User(callerId, sessionId);
-    return chooseAppropriateAction(currentUser, dtmf, quizAction, chapterNo);
+    return chooseAppropriateAction(currentUser, dtmf, quizAction, chapter);
    }
 
-  private String chooseAppropriateAction(User currentUser, String dtmf, String quizAction, String chapterNo) {
+  private String chooseAppropriateAction(User currentUser, String dtmf, String quizAction, Chapter chapter) {
     Response response = new Response();
     if(dtmf.equals("#")) {
       response.addHangup();
@@ -40,8 +42,8 @@ public class QuizController {
     }
 
     if(quizAction == null) {
-      UserUtil.saveAnswer(currentUser, chapterNo, dtmf);
+      UserUtil.saveAnswer(currentUser, chapter, dtmf);
     }
-    return UserUtil.continueQuiz(currentUser, chapterNo);
+    return UserUtil.continueQuiz(currentUser, chapter);
   }
 }

@@ -23,7 +23,7 @@ public class CourseUtil {
       response.addPlayText("Course number - " + (i));
       response.addPlayText(courseIndex.get(i - 1).getName());
       List<Module>
-          modulesForChapter = new ModuleUtil().getAllModulesForCourse(courseIndex.get(i - 1).getId());
+          modulesForChapter = new ModuleUtil().getAllModulesForCourse(courseIndex.get(i - 1));
       ResponseUtil.addModulesInChapter(response, modulesForChapter);
     }
     response.addHangup();

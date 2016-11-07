@@ -21,7 +21,7 @@ public class QuizControllerTest {
     mockHttpServletRequest = new MockHttpServletRequest();
     //mockHttpServletRequest.addParameter("quizAction","start");
     mockHttpServletRequest.addParameter("event","gotdtmf");
-    mockHttpServletRequest.addParameter("chapterNo","1");
+    //mockHttpServletRequest.addParameter("chapterNo","1");
     mockHttpServletRequest.addParameter("cid","9100571475");
     mockHttpServletRequest.addParameter("sid","7247294941424");
     mockHttpServletRequest.addParameter("data","1");
