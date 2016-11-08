@@ -4,6 +4,7 @@ import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.Course;
 import com.zapper.testIVR.model.Module;
 import com.zapper.testIVR.model.Quiz;
+import com.zapper.testIVR.model.SessionVariable;
 import com.zapper.testIVR.model.User;
 
 import org.hibernate.Criteria;
@@ -48,10 +49,11 @@ public class DBUtilTest {
 
   @Test
   @Ignore
-  public void testFirstQuizInChapter() {
-    Quiz quiz = DBUtil.getFirstQuizInChapter(new Chapter(1));
-    System.out.println(quiz.getId());
-    System.out.println(quiz.getNumberOfQuestions());
+  public void getSessionVariable() {
+    SessionVariable sv = DBUtil.getSessionVariable(new User("90"), "1234");
+    System.out.println(sv.getChapter());
+    System.out.println(sv.getId());
+    System.out.println(sv.getUser().getCallerId());
   }
 
 }

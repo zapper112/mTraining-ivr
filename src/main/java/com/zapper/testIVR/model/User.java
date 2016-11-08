@@ -1,5 +1,7 @@
 package com.zapper.testIVR.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,19 +12,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable{
 
   private String callerId;
-
-  private String sessionId;
-
-  public User() {
-  }
-
-  public User(String callerId, String sessionId) {
-    setCallerId(callerId);
-    setSessionId(sessionId);
-  }
 
   public void setCallerId (String callerId) {
     this.callerId = callerId;
@@ -34,17 +26,11 @@ public class User {
     return this.callerId;
   }
 
-  public void setSessionId(String sessionId) {
-    this.sessionId = sessionId;
+  public User() {
   }
 
   public User(String callerId) {
     this.callerId = callerId;
   }
 
-  @Column(name = "sessionId")
-
-  public String getSessionId () {
-    return this.sessionId;
-  }
 }

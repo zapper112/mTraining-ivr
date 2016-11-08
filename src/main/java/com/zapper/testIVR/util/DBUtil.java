@@ -8,6 +8,7 @@ import com.zapper.testIVR.model.Module;
 import com.zapper.testIVR.model.Option;
 import com.zapper.testIVR.model.Question;
 import com.zapper.testIVR.model.Quiz;
+import com.zapper.testIVR.model.SessionVariable;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.model.UserFeedback;
 import com.zapper.testIVR.model.UserQuizProgress;
@@ -20,6 +21,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -111,8 +113,7 @@ public class DBUtil {
         new UserQuizProgress(user, quiz, questionsAnswered + 1, quizCompleted);
     UserResponse
         ur =
-        new UserResponse(user, question, Integer.valueOf(dtmf),
-            null);  //TODO : store the correct question id in user response, timestamp taken care of in database
+        new UserResponse(user, question, Integer.valueOf(dtmf));
     UserDao.saveUserQuizProgress(uqp, userQuizProgress);
     UserDao.saveUserResponse(ur);
   }
@@ -136,7 +137,7 @@ public class DBUtil {
     session.close();
   }
 
-  public static Quiz getFirstQuizInChapter(Chapter chapter) {
+  private static Quiz getFirstQuizInChapter(Chapter chapter) {
     Criteria criteria = HibernateUtil.getSession().createCriteria(Quiz.class)
         .add(Restrictions.eq("chapter",chapter))
         .addOrder(Order.asc("id"))
@@ -144,4 +145,30 @@ public class DBUtil {
     List<Quiz> results = (List<Quiz>) criteria.list();
     return (results.size() > 0) ? results.get(0) : null;
   }
+
+  static void saveUserSession(SessionVariable sv) {
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    session.save(sv);
+    tx.commit();
+    session.close();
+  }
+
+  static SessionVariable getSessionVariable(User user, String sessionId) {
+    Criteria criteria = HibernateUtil.getSession().createCriteria(SessionVariable.class)
+        .add(Restrictions.eq("user",user))
+        .add(Restrictions.eq("sessionId",sessionId));
+    List<SessionVariable> results = (List<SessionVariable>) criteria.list();
+    return results.get(0);
+  }
+
+  static void updateSessionVariable (SessionVariable outdatedSV, SessionVariable updatedSV) {
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    session.delete(outdatedSV);
+    session.save(updatedSV);
+    tx.commit();
+    session.close();
+  }
+
 }

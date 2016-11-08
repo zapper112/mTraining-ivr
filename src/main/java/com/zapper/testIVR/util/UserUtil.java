@@ -18,7 +18,7 @@ public class UserUtil {
   private static User user;
 
   public static boolean userExists(String callerId) {
-    user = new UserDao().retrieveUser(callerId);
+    user = new UserDao().getUser(callerId);
     if (user == null) return false;
     else return true;
   }
@@ -51,7 +51,7 @@ public class UserUtil {
 
   private static String allQuizzesTakenInChapter() {
     Response response = new Response();
-    response.addPlayText("you have already attempted all quizzes in this chapter");
+    response.addPlayText("you have attempted all quizzes in this chapter. Thank you.");
     response.addHangup();
     return response.getXML();
   }

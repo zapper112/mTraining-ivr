@@ -3,6 +3,7 @@ package com.zapper.testIVR.controller;
 import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.User;
+import com.zapper.testIVR.util.SessionUtil;
 import com.zapper.testIVR.util.UserUtil;
 
 import org.springframework.stereotype.Controller;
@@ -25,12 +26,12 @@ public class QuizController {
   @ResponseBody
    public String startQuizService(HttpServletRequest request) {
     String quizAction = request.getParameter("quizAction");
-    //String chapterNo = request.getParameter("chapterNo");
-    Chapter chapter = new Chapter(Integer.valueOf("1"));
+    String chapterNo = request.getParameter("chapterNo");
     String dtmf = request.getParameter("data");
     callerId = request.getParameter("cid");
     sessionId = request.getParameter("sid");
-    currentUser = new User(callerId, sessionId);
+    currentUser = new User(callerId);
+    Chapter chapter = new SessionUtil().getChapterForSession(new User(callerId), sessionId, chapterNo);
     return chooseAppropriateAction(currentUser, dtmf, quizAction, chapter);
    }
 

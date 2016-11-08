@@ -4,6 +4,7 @@ import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.service.Home;
 import com.zapper.testIVR.util.CourseUtil;
+import com.zapper.testIVR.util.SessionUtil;
 import com.zapper.testIVR.util.UserUtil;
 
 import org.springframework.stereotype.Controller;
@@ -27,11 +28,12 @@ public class WelcomeController {
     String cid = request.getParameter("cid");
 
     if (event != null && event.toLowerCase().equals("newcall")) {
+      new SessionUtil().saveUserSession(new User(cid), sid);
       if (UserUtil.userExists(cid)) {
-        UserUtil.addOrUpdateUser(new User(cid, sid));
-        return new Home().continueSession(new User(cid, sid));
+        UserUtil.addOrUpdateUser(new User(cid));
+        return new Home().continueSession(new User(cid));
       } else {
-        UserUtil.addOrUpdateUser(new User(cid, sid));
+        UserUtil.addOrUpdateUser(new User(cid));
         return new Home().startSession();
       }
     } else if (event != null && event.toLowerCase().equals("gotdtmf")) {

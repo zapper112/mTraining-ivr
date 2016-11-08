@@ -27,17 +27,13 @@ public class UserResponse extends UserFeedback {
 
   private Integer optionNo;
 
-  private Timestamp timeOfAnswer;
-
   public UserResponse() {
   }
 
-  public UserResponse(User user, Question question, Integer optionNo,
-                      Timestamp timeOfAnswer) {
+  public UserResponse(User user, Question question, Integer optionNo ) {
     this.user = user;
     this.question = question;
     this.optionNo = optionNo;
-    this.timeOfAnswer = timeOfAnswer;
   }
 
   @Id
@@ -81,12 +77,4 @@ public class UserResponse extends UserFeedback {
     this.optionNo = optionNo;
   }
 
-  @Column(name = "timeOfAnswer")
-  public Timestamp getTimeOfAnswer() {
-    return timeOfAnswer;
-  }
-
-  public void setTimeOfAnswer(Timestamp timeOfAnswer) {
-    this.timeOfAnswer = timeOfAnswer;
-  }
 }

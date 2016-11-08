@@ -34,7 +34,7 @@ public class UserDao {
    * @param callerId
    * @return the user (if any) found from the data source
    */
-  public User retrieveUser(String callerId) {
+  public User getUser(String callerId) {
     session = HibernateUtil.getSession();
     Transaction transaction = session.beginTransaction();
     User retrievedUser = session.get(User.class,callerId);
