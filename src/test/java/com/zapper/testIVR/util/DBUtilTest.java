@@ -56,4 +56,11 @@ public class DBUtilTest {
     System.out.println(sv.getUser().getCallerId());
   }
 
+  @Test
+  @Ignore
+  public void getContinuingChapter() {
+    Chapter chapter = DBUtil.getContinuingChapter(new User("90"));
+    System.out.println(chapter.getModule().getName());
+  }
+
 }

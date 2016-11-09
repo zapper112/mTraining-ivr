@@ -28,7 +28,7 @@ public class UserDaoTest {
   @Test
   public void testUserRetrieve() {
     userDao = new UserDao();
-    System.out.println(userDao.getUser("90").getCallerId());
+    System.out.println(userDao.getUser(new User("90")).getCallerId());
   }
 
   @Test

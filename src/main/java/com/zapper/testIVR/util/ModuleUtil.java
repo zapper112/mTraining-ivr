@@ -11,6 +11,6 @@ import java.util.List;
 public class ModuleUtil {
 
   public List<Module> getAllModulesForCourse(Course course) {
-    return DBUtil.getAllModulesForCourse(course);
+    return DBUtil.getModulesForCourse(course);
   }
 }

@@ -4,10 +4,13 @@ import com.zapper.testIVR.dao.UserDao;
 import com.zapper.testIVR.kookooJava.CollectDtmf;
 import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.Chapter;
+import com.zapper.testIVR.model.Course;
+import com.zapper.testIVR.model.Message;
 import com.zapper.testIVR.model.Option;
 import com.zapper.testIVR.model.Question;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.model.UserQuizProgress;
+import com.zapper.testIVR.service.StandardMessage;
 
 import java.util.List;
 
@@ -17,8 +20,8 @@ import java.util.List;
 public class UserUtil {
   private static User user;
 
-  public static boolean userExists(String callerId) {
-    user = new UserDao().getUser(callerId);
+  public static boolean userExists(User currentUser) {
+    user = new UserDao().getUser(currentUser);
     if (user == null) return false;
     else return true;
   }
@@ -55,4 +58,17 @@ public class UserUtil {
     response.addHangup();
     return response.getXML();
   }
+
+  public String getChapterForUser(User user) {
+    Response response = new Response();
+    Chapter chapter = new CourseUtil().getContinuingChatper(user);
+    List<Message> messages = new MessageUtil().getMessagesForChapter(chapter);
+    response.addPlayText(chapter.getName());
+    for(Message message : messages) {
+      response.addPlayText(message.getContent());
+    }
+    response.addPlayText(StandardMessage.QUIZ_PROMPT);
+    return response.getXML();
+  }
+
 }

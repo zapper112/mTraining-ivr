@@ -29,7 +29,7 @@ public class WelcomeController {
 
     if (event != null && event.toLowerCase().equals("newcall")) {
       new SessionUtil().saveUserSession(new User(cid), sid);
-      if (UserUtil.userExists(cid)) {
+      if (UserUtil.userExists(new User(cid))) {
         UserUtil.addOrUpdateUser(new User(cid));
         return new Home().continueSession(new User(cid));
       } else {
@@ -38,8 +38,7 @@ public class WelcomeController {
       }
     } else if (event != null && event.toLowerCase().equals("gotdtmf")) {
       if (request.getParameter("data").equals("1")) {
-        String returnXML = new CourseUtil().startCoursesFromBeginning();
-        return returnXML;
+        return new CourseUtil().startCourseForUser(new User(cid));
       } else if (request.getParameter("data").equals("2")) {
         response.addPlayText("Thank you for calling M-Training");
         response.addHangup();

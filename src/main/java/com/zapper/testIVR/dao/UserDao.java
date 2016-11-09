@@ -6,10 +6,14 @@ import com.zapper.testIVR.model.UserQuizProgress;
 import com.zapper.testIVR.model.UserResponse;
 import com.zapper.testIVR.util.HibernateUtil;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.List;
 
 /**
  * Created by Satyarth on 26/10/16.
@@ -34,12 +38,11 @@ public class UserDao {
    * @param callerId
    * @return the user (if any) found from the data source
    */
-  public User getUser(String callerId) {
-    session = HibernateUtil.getSession();
-    Transaction transaction = session.beginTransaction();
-    User retrievedUser = session.get(User.class,callerId);
-    transaction.commit();
-    return retrievedUser;
+  public User getUser(User user) {
+    Criteria criteria = HibernateUtil.getSession().createCriteria(User.class)
+        .add(Restrictions.eq("callerId", user.getCallerId()));
+    List<User> results = (List<User>) criteria.list();
+    return (results.size() > 0 ) ? results.get(0) : null;
   }
 
 

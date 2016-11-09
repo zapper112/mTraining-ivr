@@ -22,5 +22,6 @@
         <mapping class="com.zapper.testIVR.model.UserQuizProgress"/>
         <mapping class="com.zapper.testIVR.model.UserResponse"/>
         <mapping class="com.zapper.testIVR.model.SessionVariable"/>
+        <mapping class="com.zapper.testIVR.model.UserChapterProgress"/>
     </session-factory>
 </hibernate-configuration>
