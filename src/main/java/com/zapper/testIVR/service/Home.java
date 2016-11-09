@@ -20,10 +20,12 @@ public class Home {
     return response.getXML();
   }
 
-  public String continueSession(User user) {
-    response.addPlayText("Welcome back");
-    response.getXML().concat(startSession());
-    response.addHangup();
+  public String continueSession() {
+    CollectDtmf cd = new CollectDtmf();
+    cd.addPlayText("Hello !Welcome back");
+    cd.addPlayText("To resume Course press 1");
+    cd.addPlayText("To exit M-Training press 2");
+    response.addCollectDtmf(cd);
     return response.getXML();
   }
 }

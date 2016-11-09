@@ -63,11 +63,13 @@ public class UserUtil {
     Response response = new Response();
     Chapter chapter = new CourseUtil().getContinuingChatper(user);
     List<Message> messages = new MessageUtil().getMessagesForChapter(chapter);
-    response.addPlayText(chapter.getName());
+    CollectDtmf cd = new CollectDtmf();
+    cd.addPlayText(chapter.getName());
     for(Message message : messages) {
-      response.addPlayText(message.getContent());
+      cd.addPlayText(message.getContent());
     }
-    response.addPlayText(StandardMessage.QUIZ_PROMPT);
+    cd.addPlayText(StandardMessage.QUIZ_PROMPT);
+    response.addCollectDtmf(cd);
     return response.getXML();
   }
 

@@ -31,8 +31,13 @@ public class CourseUtil {
     return response.getXML();
   }
 
-  public String startCourseForUser(User user) {
-    return null;
+  public String redirectToChapterController(User user) {
+    Response response = new Response();
+    response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/chapter?cid=" + user.getCallerId());
+    String returnString = response.getXML();
+    returnString = returnString.replace("&amp;","&");
+    System.out.println(returnString);
+    return returnString;
   }
 
   public Chapter getContinuingChatper(User user) {

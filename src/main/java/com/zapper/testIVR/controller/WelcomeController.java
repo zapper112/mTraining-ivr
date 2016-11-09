@@ -3,6 +3,7 @@ package com.zapper.testIVR.controller;
 import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.User;
 import com.zapper.testIVR.service.Home;
+import com.zapper.testIVR.service.StandardMessage;
 import com.zapper.testIVR.util.CourseUtil;
 import com.zapper.testIVR.util.SessionUtil;
 import com.zapper.testIVR.util.UserUtil;
@@ -28,22 +29,22 @@ public class WelcomeController {
     String cid = request.getParameter("cid");
 
     if (event != null && event.toLowerCase().equals("newcall")) {
-      new SessionUtil().saveUserSession(new User(cid), sid);
       if (UserUtil.userExists(new User(cid))) {
-        UserUtil.addOrUpdateUser(new User(cid));
-        return new Home().continueSession(new User(cid));
+        new SessionUtil().saveUserSession(new User(cid), sid);
+        return new Home().continueSession();
       } else {
         UserUtil.addOrUpdateUser(new User(cid));
+        new SessionUtil().saveUserSession(new User(cid), sid);
         return new Home().startSession();
       }
     } else if (event != null && event.toLowerCase().equals("gotdtmf")) {
       if (request.getParameter("data").equals("1")) {
-        return new CourseUtil().startCourseForUser(new User(cid));
+        return new CourseUtil().redirectToChapterController(new User(cid));
       } else if (request.getParameter("data").equals("2")) {
-        response.addPlayText("Thank you for calling M-Training");
+        response.addPlayText(StandardMessage.THANK_USER);
         response.addHangup();
       } else {
-        response.addPlayText("Sorry that is not a valid input");
+        response.addPlayText(StandardMessage.INVALID_INPUT);
         response.addHangup();
       }
     }

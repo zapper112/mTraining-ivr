@@ -22,7 +22,19 @@ public class ChapterController {
     Response response = new Response();
     String cid = request.getParameter("cid");
     String event = request.getParameter("event");
-    if(event == null) {
+    String data = request.getParameter("data");
+    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    System.out.println("event = "+ event);
+    System.out.println("cid = " + cid);
+    System.out.println("data = " + data);
+    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    if(event != null && event.equalsIgnoreCase("gotdtmf") && data != null && data.equals("1") ) {
+      response.addPlayText("integrating the quiz sub module soon. Will also update U C P");
+      response.addHangup();
+      return response.getXML();
+    }
+    else if (event != null && event.equalsIgnoreCase("gotdtmf") && data != null && data.equals("2")) {
+      response.addPlayText("Thank you for calling m Trainig. Will also update U C P");
       response.addHangup();
       return response.getXML();
     }
