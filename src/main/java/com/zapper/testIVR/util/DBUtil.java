@@ -16,7 +16,6 @@ import com.zapper.testIVR.model.UserResponse;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -78,7 +77,7 @@ public class DBUtil {
 
   static UserQuizProgress getUserQuizProgress(User user, Chapter chapter) {
     if (!recordPresentInUQP(user, chapter)) {
-      createNewUQP(user, chapter);
+      createNewUQPs(user, chapter);
     }
     Criteria criteria = HibernateUtil.getSession().createCriteria(UserQuizProgress.class)
         .add(Restrictions.eq("user", user))
@@ -146,12 +145,15 @@ public class DBUtil {
     return (results.size() >= 1);
   }
 
-  private static void createNewUQP(User user, Chapter chapter) {
-    Quiz quiz = getFirstQuizInChapter(chapter);
-    UserQuizProgress uqp = new UserQuizProgress(user, quiz, 0, false);
+  //this method will add UQPs for all quizzes in the chapter
+  private static void createNewUQPs(User user, Chapter chapter) {
+    List<Quiz> quizzesInChapter = getQuizzesForChapter(chapter);
     Session session = HibernateUtil.getSession();
     Transaction tx = session.beginTransaction();
-    session.save(uqp);
+    for(Quiz quiz : quizzesInChapter) {
+      UserQuizProgress uqp = new UserQuizProgress(user, quiz, 0, false);
+      session.save(uqp);
+    }
     tx.commit();
     session.close();
   }
