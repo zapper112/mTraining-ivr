@@ -1,7 +1,9 @@
 package com.zapper.testIVR.controller;
 
 import com.zapper.testIVR.kookooJava.Response;
+import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.User;
+import com.zapper.testIVR.util.ChapterUtil;
 import com.zapper.testIVR.util.UserUtil;
 
 import org.springframework.stereotype.Controller;
@@ -23,18 +25,15 @@ public class ChapterController {
     String cid = request.getParameter("cid");
     String event = request.getParameter("event");
     String data = request.getParameter("data");
-    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    System.out.println("event = "+ event);
-    System.out.println("cid = " + cid);
-    System.out.println("data = " + data);
-    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     if(event != null && event.equalsIgnoreCase("gotdtmf") && data != null && data.equals("1") ) {
-      response.addPlayText("integrating the quiz sub module soon. Will also update U C P");
-      response.addHangup();
-      return response.getXML();
+      new ChapterUtil().updateUCPwithChapter(new User(cid));
+      Chapter lastCompletedChapter = new ChapterUtil().getLastCompletedChapter(new User(cid));
+      response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/quiz?cid=" + cid);
+      return response.getXML().replace("&amp;","&");
     }
     else if (event != null && event.equalsIgnoreCase("gotdtmf") && data != null && data.equals("2")) {
-      response.addPlayText("Thank you for calling m Trainig. Will also update U C P");
+      new ChapterUtil().updateUCPwithChapter(new User(cid));
+      response.addPlayText("Thank you for calling m Trainig.");
       response.addHangup();
       return response.getXML();
     }

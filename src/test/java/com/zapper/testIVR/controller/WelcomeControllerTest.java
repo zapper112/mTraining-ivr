@@ -20,8 +20,8 @@ public class WelcomeControllerTest {
   @Ignore
   public void startServiceTest() {
     servletRequest.addParameter("event","newcall");
-    servletRequest.addParameter("cid","8575");
-    servletRequest.addParameter("sid","81646");
+    servletRequest.addParameter("cid","1425");
+    servletRequest.addParameter("sid","1426");
     servletRequest.addParameter("data","1");
     System.out.println(welcomeController.startService(servletRequest));
   }

@@ -3,6 +3,7 @@ package com.zapper.testIVR.controller;
 import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.User;
+import com.zapper.testIVR.util.QuizUtil;
 import com.zapper.testIVR.util.SessionUtil;
 import com.zapper.testIVR.util.UserUtil;
 
@@ -25,24 +26,23 @@ public class QuizController {
   @RequestMapping(value = "/quiz")
   @ResponseBody
    public String startQuizService(HttpServletRequest request) {
-    String quizAction = request.getParameter("quizAction");
-    String chapterNo = request.getParameter("chapterNo");
-    String dtmf = request.getParameter("data");
+    String dtmf = request.getParameter("data"); //dtmf will be null on the first redirect from Chapter Controller
     callerId = request.getParameter("cid");
-    sessionId = request.getParameter("sid");
+    sessionId = new QuizUtil().getCurrentSessionId(new User(callerId));
     currentUser = new User(callerId);
-    Chapter chapter = new SessionUtil().getChapterForSession(new User(callerId), sessionId, chapterNo);
-    return chooseAppropriateAction(currentUser, dtmf, quizAction, chapter);
+    Chapter chapter = new UserUtil().getChapterForQuiz(new User(callerId));
+    return chooseAppropriateAction(currentUser, dtmf, chapter);
    }
 
-  private String chooseAppropriateAction(User currentUser, String dtmf, String quizAction, Chapter chapter) {
+  private String chooseAppropriateAction(User currentUser, String dtmf, Chapter chapter) {
+    //dtmf equals null for the redirect from chapter controller
     Response response = new Response();
-    if(dtmf.equals("#")) {
+    if(dtmf != null && dtmf.equals("#")) {
       response.addHangup();
       return response.getXML();
     }
 
-    if(quizAction == null) {
+    if(dtmf != null) {
       UserUtil.saveAnswer(currentUser, chapter, dtmf);
     }
     return UserUtil.continueQuiz(currentUser, chapter);

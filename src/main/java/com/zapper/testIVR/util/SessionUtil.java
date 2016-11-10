@@ -16,15 +16,15 @@ public class SessionUtil {
     DBUtil.saveUserSession(sv);
   }
 
-  public Chapter getChapterForSession(User user, String sessionId, String chapterId) {
+  public Chapter getChapterForSession(User user, String sessionId, Integer chapterId) {
     if(chapterId != null) updateUserSessionWithChaper(user, sessionId, chapterId);
     SessionVariable sv = DBUtil.getSessionVariable(user, sessionId);
     return sv.getChapter();
   }
 
-  private void updateUserSessionWithChaper(User user, String sessionId, String chapterId) {
+  private void updateUserSessionWithChaper(User user, String sessionId, Integer chapterId) {
     SessionVariable previousSessionVariable = DBUtil.getSessionVariable(user,sessionId);
-    SessionVariable currentSessionVariable = new SessionVariable(user, sessionId,new Chapter(Integer.valueOf(chapterId)));
+    SessionVariable currentSessionVariable = new SessionVariable(user, sessionId,new Chapter(chapterId));
     DBUtil.updateSessionVariable(previousSessionVariable, currentSessionVariable);
   }
 }

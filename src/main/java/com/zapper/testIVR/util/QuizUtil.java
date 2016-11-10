@@ -4,6 +4,7 @@ import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.Option;
 import com.zapper.testIVR.model.Question;
 import com.zapper.testIVR.model.Quiz;
+import com.zapper.testIVR.model.User;
 
 import java.util.List;
 
@@ -22,6 +23,10 @@ public class QuizUtil {
 
   public List<Option> getOptionsForQuestion(Question question) {
     return DBUtil.getOptionsForQuestion(question);
+  }
+
+  public String getCurrentSessionId(User user) {
+    return DBUtil.getCurrentSessionId(user);
   }
 }
 

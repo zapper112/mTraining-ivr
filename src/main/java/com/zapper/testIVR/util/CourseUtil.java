@@ -35,7 +35,6 @@ public class CourseUtil {
     Response response = new Response();
     response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/chapter?cid=" + user.getCallerId());
     String returnString = response.getXML();
-    returnString = returnString.replace("&amp;","&");
     System.out.println(returnString);
     return returnString;
   }

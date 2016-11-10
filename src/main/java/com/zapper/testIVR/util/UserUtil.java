@@ -73,4 +73,7 @@ public class UserUtil {
     return response.getXML();
   }
 
+  public Chapter getChapterForQuiz(User user) {
+    return DBUtil.getChapterForQuiz(user);
+  }
 }
