@@ -33,7 +33,8 @@ public class UserUtil {
   public static String continueQuiz(User user, Chapter chapter) {
     UserQuizProgress userQuizProgress = DBUtil.getUserQuizProgress(user, chapter);
     if(userQuizProgress == null) {
-      return allQuizzesTakenInChapter();
+      updateUCPwithQuizDone(user);
+      return allQuizzesTakenInChapter(user);
     }
     Question question = DBUtil.getContinuingQuestion(userQuizProgress);
     List<Option> options = DBUtil.getOptionsForQuestion(question);
@@ -48,14 +49,18 @@ public class UserUtil {
     return response.getXML();
   }
 
+  //TODO : implement this method
+  private static void updateUCPwithQuizDone(User user) {
+  }
+
   public static void saveAnswer(User user, Chapter chapter, String dtmf) {
     DBUtil.saveAnswer(user, chapter, dtmf);
   }
 
-  private static String allQuizzesTakenInChapter() {
+  private static String allQuizzesTakenInChapter(User user) {
     Response response = new Response();
-    response.addPlayText("you have attempted all quizzes in this chapter. Thank you.");
-    response.addHangup();
+    response.addPlayText(StandardMessage.QUIZ_END);
+    response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/chapter?cid=" + user.getCallerId());
     return response.getXML();
   }
 

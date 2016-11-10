@@ -34,9 +34,7 @@ public class CourseUtil {
   public String redirectToChapterController(User user) {
     Response response = new Response();
     response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/chapter?cid=" + user.getCallerId());
-    String returnString = response.getXML();
-    System.out.println(returnString);
-    return returnString;
+    return response.getXML();
   }
 
   public Chapter getContinuingChatper(User user) {

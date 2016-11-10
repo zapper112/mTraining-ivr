@@ -21,7 +21,7 @@ public class QuizControllerTest {
     mockHttpServletRequest = new MockHttpServletRequest();
     mockHttpServletRequest.addParameter("cid","9100571475");
     //mockHttpServletRequest.addParameter("sid","123456");
-    //mockHttpServletRequest.addParameter("data","1");
+    mockHttpServletRequest.addParameter("data","1");
     System.out.println(quizController.startQuizService(mockHttpServletRequest));
   }
 

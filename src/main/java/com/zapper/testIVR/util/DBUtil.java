@@ -88,13 +88,30 @@ public class DBUtil {
     List<UserQuizProgress> results = (List<UserQuizProgress>) criteria.list();
     if (results.size() == 0) {
       //This means that either the user has already completed all the quizzes or is currently at finished state of a quiz
-      return getNextUserQuizProgress(user, chapter);
+      UserQuizProgress nextUQP = getNextUserQuizProgress(user, chapter);
+      saveNextUQP(nextUQP);
+      return null;
     }
     return results.get(0);
   }
 
   private static UserQuizProgress getNextUserQuizProgress(User user, Chapter chapter) {
-    return null;
+    Criteria criteria = HibernateUtil.getSession().createCriteria(Quiz.class)
+        .add(Restrictions.gt("chapter",chapter))
+        .addOrder(Order.asc("id"))
+        .setMaxResults(1);
+    List<Quiz> results = (List<Quiz>) criteria.list();
+    Quiz nextQuiz = (results.size() > 0) ? results.get(0) : null;
+    UserQuizProgress nextUQP = new UserQuizProgress(user, nextQuiz, 0, false);
+    return nextUQP;
+  }
+
+  private static void saveNextUQP(UserQuizProgress nextUQP) {
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    session.save(nextUQP);
+    tx.commit();
+    session.close();
   }
 
   static Question getContinuingQuestion(UserQuizProgress uqp) {
