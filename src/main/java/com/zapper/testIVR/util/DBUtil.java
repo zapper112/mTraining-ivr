@@ -28,63 +28,94 @@ import java.util.List;
  */
 public class DBUtil {
 
-  static List<Course> getCourseIndex() {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Course.class);
-    return (List<Course>) criteria.list();
-  }
-
   static List<Module> getModulesForCourse(Course course) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Module.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Module.class)
         .add(Restrictions.eq("course", course))
         .addOrder(Order.asc("id"));
-    return (List<Module>) criteria.list();
+    List<Module> modules = (List<Module>) criteria.list();
+    tx.commit();
+    session.close();
+    return modules;
   }
 
   static List<Chapter> getChaptersForModule(Module module) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Chapter.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Chapter.class)
         .add(Restrictions.eq("module", module))
         .addOrder(Order.asc("id"));
-    return (List<Chapter>) criteria.list();
+    List<Chapter> chapters = (List<Chapter>) criteria.list();
+    tx.commit();
+    session.close();
+    return chapters;
   }
 
   static List<Message> getMessagesForChapter(Chapter chapter) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Message.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Message.class)
         .add(Restrictions.eq("chapter", chapter))
         .addOrder(Order.asc("id"));
-    return (List<Message>) criteria.list();
+    List<Message> messages = (List<Message>) criteria.list();
+    tx.commit();
+    session.close();
+    return messages;
   }
 
   static List<Quiz> getQuizzesForChapter(Chapter chapter) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Quiz.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Quiz.class)
         .add(Restrictions.eq("chapter", chapter))
         .addOrder(Order.asc("id"));
-    return (List<Quiz>) criteria.list();
+    List<Quiz> quizzes = (ArrayList<Quiz>) criteria.list();
+    tx.commit();
+    session.close();
+    return quizzes;
   }
 
   static List<Question> getQuestionsForQuiz(Quiz quiz) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Question.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Question.class)
         .add(Restrictions.eq("quiz", quiz))
         .addOrder(Order.asc("id"));
-    return (List<Question>) criteria.list();
+    List<Question> questions = (List<Question>) criteria.list();
+    tx.commit();
+    session.close();
+    return questions;
   }
 
   static List<Option> getOptionsForQuestion(Question question) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Option.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Option.class)
         .add(Restrictions.eq("question", question))
         .addOrder(Order.asc("optionNo"));
-    return (List<Option>) criteria.list();
+    List<Option> options = (List<Option>) criteria.list();
+    tx.commit();
+    session.close();
+    return options;
   }
 
   static UserQuizProgress getUserQuizProgress(User user, Chapter chapter) {
     if (!recordPresentInUQP(user, chapter)) {
       createNewUQPs(user, chapter);
     }
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserQuizProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserQuizProgress.class, "uqp")
         .add(Restrictions.eq("user", user))
         .add(Restrictions.eq("quizCompleted", false));
     criteria.createAlias("quiz", "uq")
-        .add(Restrictions.eq("uq.chapter", chapter));
+        .add(Restrictions.eq("uq.chapter", chapter))
+        .addOrder(Order.asc("uqp.quiz"))
+        .setMaxResults(1);
     List<UserQuizProgress> results = (List<UserQuizProgress>) criteria.list();
+    tx.commit();
+    session.close();
     if (results.size() == 0) {
       //This means that either the user has already completed all the quizzes or is currently at finished state of a quiz
       UserQuizProgress nextUQP = getNextUserQuizProgress(user, chapter);
@@ -95,11 +126,15 @@ public class DBUtil {
   }
 
   private static UserQuizProgress getNextUserQuizProgress(User user, Chapter chapter) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Quiz.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Quiz.class)
         .add(Restrictions.gt("chapter",chapter))
         .addOrder(Order.asc("id"))
         .setMaxResults(1);
     List<Quiz> results = (List<Quiz>) criteria.list();
+    tx.commit();
+    session.close();
     Quiz nextQuiz = (results.size() > 0) ? results.get(0) : null;
     UserQuizProgress nextUQP = new UserQuizProgress(user, nextQuiz, 0, false);
     return nextUQP;
@@ -114,12 +149,16 @@ public class DBUtil {
   }
 
   static Question getContinuingQuestion(UserQuizProgress uqp) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Question.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(Question.class)
         .add(Restrictions.eq("quiz", uqp.getQuiz()))
         .addOrder(Order.asc("id"))
         .setFirstResult(uqp.getQuestionsAnswered())
         .setMaxResults(1);
     List<Question> results = (List<Question>) criteria.list();
+    tx.commit();
+    session.close();
     return results.get(0);
   }
 
@@ -137,11 +176,15 @@ public class DBUtil {
   }
 
   private static Boolean recordPresentInUQP(User user, Chapter chapter) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserQuizProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserQuizProgress.class)
         .add(Restrictions.eq("user", user))
         .createAlias("quiz", "q")
         .add(Restrictions.eq("q.chapter", chapter));
     List results = criteria.list();
+    tx.commit();
+    session.close();
     return (results.size() >= 1);
   }
 
@@ -158,15 +201,7 @@ public class DBUtil {
     session.close();
   }
 
-  private static Quiz getFirstQuizInChapter(Chapter chapter) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(Quiz.class)
-        .add(Restrictions.eq("chapter", chapter))
-        .addOrder(Order.asc("id"))
-        .setMaxResults(1);
-    List<Quiz> results = (List<Quiz>) criteria.list();
-    return (results.size() > 0) ? results.get(0) : null;
-  }
-
+  
   static void saveUserSession(SessionVariable sv) {
     Session session = HibernateUtil.getSession();
     Transaction tx = session.beginTransaction();
@@ -176,10 +211,14 @@ public class DBUtil {
   }
 
   static SessionVariable getSessionVariable(User user, String sessionId) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(SessionVariable.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(SessionVariable.class)
         .add(Restrictions.eq("user", user))
         .add(Restrictions.eq("sessionId", sessionId));
     List<SessionVariable> results = (List<SessionVariable>) criteria.list();
+    tx.commit();
+    session.close();
     return results.get(0);
   }
 
@@ -192,19 +231,26 @@ public class DBUtil {
     session.close();
   }
 
-  public static Chapter getContinuingChapter(User user) {
+  static Chapter getContinuingChapter(User user) {
     if (!recordPresentInUCP(user)) {
       createFirstUCP(user);
     }
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserChapterProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserChapterProgress.class)
         .add(Restrictions.eq("user", user))
         .add(Restrictions.eq("chapterRead", false))
         .addOrder(Order.asc("chapter"))
         .setMaxResults(1);
     List<UserChapterProgress> results = (List<UserChapterProgress>) criteria.list();
+    tx.commit();
+    session.close();
     if (results.size() == 0) {
       //This means that either the user is done with all the chapters or is at the finished state of a chapter
       Chapter chapter = getNextChapter(user);
+      if(chapter.getId() == -1) {
+        return chapter;
+      }
       UserChapterProgress nextUCP = new UserChapterProgress(user, chapter);
       saveNextUCP(nextUCP);
       return chapter;
@@ -221,6 +267,7 @@ public class DBUtil {
   }
 
   private static Chapter getNextChapter(User user) {
+    //returning chapter with id = -1 in case all the chapters in the course are finished
     Chapter lastFinishedChapter = getLastFinishedChapter(user);
     List<Chapter> allChaptersInCourse = new ArrayList<Chapter>();
     List<Module>
@@ -237,8 +284,9 @@ public class DBUtil {
         index = i;
         break;
       }
+      i++;
     }
-    return allChaptersInCourse.get(index + 1);
+    return (index < chaptersArray.length -1 )? allChaptersInCourse.get(index + 1) : new Chapter(-1);
   }
 
   private static Chapter[] convertListToArray(List chapterList) {
@@ -248,12 +296,16 @@ public class DBUtil {
   }
 
   private static Chapter getLastFinishedChapter(User user) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserChapterProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserChapterProgress.class)
         .add(Restrictions.eq("user", user))
         .add(Restrictions.eq("chapterRead", true))
         .addOrder(Order.desc("chapter"))
         .setMaxResults(1);
     List<UserChapterProgress> results = (List<UserChapterProgress>) criteria.list();
+    tx.commit();
+    session.close();
     return results.get(0).getChapter();
   }
 
@@ -267,13 +319,17 @@ public class DBUtil {
   }
 
   private static boolean recordPresentInUCP(User user) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserChapterProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserChapterProgress.class)
         .add(Restrictions.eq("user", user));
     List<UserChapterProgress> results = (List<UserChapterProgress>) criteria.list();
+    tx.commit();
+    session.close();
     return (results.size() > 0);
   }
 
-  public static void updateUCPwithChapter(User user) {
+  static void updateUCPwithChapter(User user) {
     UserChapterProgress firstIncompleteUCP = getFirstIncompleteUCP(user);
     markUCPasChapterRead(firstIncompleteUCP);
   }
@@ -298,40 +354,56 @@ public class DBUtil {
   }
 
   private static UserChapterProgress getFirstIncompleteUCP(User user) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserChapterProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserChapterProgress.class)
         .add(Restrictions.eq("user", user))
         .add(Restrictions.eq("chapterRead", false))
         .addOrder(Order.asc("chapter"))
         .setMaxResults(1);
     List<UserChapterProgress> results = (List<UserChapterProgress>) criteria.list();
+    tx.commit();
+    session.close();
     return (results.size() > 0) ? results.get(0) : null;
   }
 
   static Chapter getLastCompletedChapter(User user) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserChapterProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserChapterProgress.class)
         .add(Restrictions.eq("user",user))
         .add(Restrictions.eq("chapterRead",true))
         .addOrder(Order.desc("chapter"))
         .setMaxResults(1);
     List<UserChapterProgress> results = (List<UserChapterProgress>) criteria.list();
+    tx.commit();
+    session.close();
     return (results.size() > 0) ? results.get(0).getChapter() : null;
   }
 
   static String getCurrentSessionId(User user) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(SessionVariable.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(SessionVariable.class)
         .add(Restrictions.eq("user",user))
         .addOrder(Order.desc("id"))
         .setMaxResults(1);
     List<SessionVariable> results = (List<SessionVariable>) criteria.list();
+    tx.commit();
+    session.close();
     return (results.size() > 0) ? results.get(0).getSessionId() : null;
   }
 
   static Chapter getChapterForQuiz(User user) {
-    Criteria criteria = HibernateUtil.getSession().createCriteria(UserChapterProgress.class)
+    Session session = HibernateUtil.getSession();
+    Transaction tx = session.beginTransaction();
+    Criteria criteria = session.createCriteria(UserChapterProgress.class)
         .add(Restrictions.eq("user",user))
         .addOrder(Order.desc("id"))
         .setMaxResults(1);
     List<UserChapterProgress> results = (List<UserChapterProgress>) criteria.list();
+    tx.commit();
+    session.close();
     return (results.size() > 0) ? results.get(0).getChapter() : null;
   }
 }

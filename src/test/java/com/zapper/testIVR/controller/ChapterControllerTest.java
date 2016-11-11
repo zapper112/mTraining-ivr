@@ -16,9 +16,9 @@ public class ChapterControllerTest {
   public void testChapterService() throws Exception {
     chapterController = new ChapterController();
     MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
-    mockHttpServletRequest.addParameter("event","gotDtmf");
-    mockHttpServletRequest.addParameter("data","1");
-    mockHttpServletRequest.addParameter("cid","9100571475");
+    //mockHttpServletRequest.addParameter("event","gotDtmf");
+    //mockHttpServletRequest.addParameter("data","1");
+    mockHttpServletRequest.addParameter("cid","100");
     System.out.println(chapterController.chapterService(mockHttpServletRequest));
   }
 }

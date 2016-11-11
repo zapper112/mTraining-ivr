@@ -19,9 +19,9 @@ public class WelcomeControllerTest {
   @Test
   @Ignore
   public void startServiceTest() {
-    servletRequest.addParameter("event","newcall");
-    servletRequest.addParameter("cid","1425");
-    servletRequest.addParameter("sid","1426");
+    servletRequest.addParameter("event","gotdtmf");
+    servletRequest.addParameter("cid","100");
+    //servletRequest.addParameter("sid","101");
     servletRequest.addParameter("data","1");
     System.out.println(welcomeController.startService(servletRequest));
   }

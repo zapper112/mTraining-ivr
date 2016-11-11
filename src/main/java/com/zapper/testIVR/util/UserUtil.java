@@ -67,6 +67,11 @@ public class UserUtil {
   public String getChapterForUser(User user) {
     Response response = new Response();
     Chapter chapter = new CourseUtil().getContinuingChatper(user);
+    if(chapter.getId() == -1) {
+      response.addPlayText(StandardMessage.ALL_CHAPTERS_FINISHED);
+      response.addHangup();
+      return response.getXML();
+    }
     List<Message> messages = new MessageUtil().getMessagesForChapter(chapter);
     CollectDtmf cd = new CollectDtmf();
     cd.addPlayText(chapter.getName());

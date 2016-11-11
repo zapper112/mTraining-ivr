@@ -17,19 +17,6 @@ import java.util.Map;
  */
 public class CourseUtil {
 
-  public String startCoursesFromBeginning() {
-    Response response = new Response();
-    ArrayList<Course> courseIndex = (ArrayList<Course>) DBUtil.getCourseIndex();
-    for(int i = 1; i <= courseIndex.size(); i ++) {
-      response.addPlayText("Course number - " + (i));
-      response.addPlayText(courseIndex.get(i - 1).getName());
-      List<Module>
-          modulesForChapter = new ModuleUtil().getAllModulesForCourse(courseIndex.get(i - 1));
-      ResponseUtil.addModulesInChapter(response, modulesForChapter);
-    }
-    response.addHangup();
-    return response.getXML();
-  }
 
   public String redirectToChapterController(User user) {
     Response response = new Response();

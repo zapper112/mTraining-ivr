@@ -19,17 +19,6 @@ import java.util.List;
  */
 public class DBUtilTest {
 
-
-  @Test
-  @Ignore
-  public void getCourseIndexTest() {
-   List<Course> courses = DBUtil.getCourseIndex();
-    for(Course c : courses) {
-      System.out.println("Id = " + c.getId());
-      System.out.println("name = " + c.getName());
-    }
-  }
-
   @Test
   @Ignore
   public void testGetContinuingQuestion() {
@@ -61,6 +50,25 @@ public class DBUtilTest {
   public void getContinuingChapter() {
     Chapter chapter = DBUtil.getContinuingChapter(new User("90"));
     System.out.println(chapter.getModule().getName());
+  }
+
+  @Test
+  @Ignore
+  public void testGetModules() {
+    List<Module> modules = DBUtil.getModulesForCourse(new Course(1));
+    for(Module m : modules) {
+      System.out.println(m.getName());
+    }
+  }
+
+  @Test
+  @Ignore
+  public void testQuizzesForChapter() {
+    List<Quiz> quizzes = DBUtil.getQuizzesForChapter(new Chapter(1));
+    for (Quiz quiz : quizzes) {
+      System.out.println("id " + quiz.getId());
+      System.out.println("questions " + quiz.getNumberOfQuestions());
+    }
   }
 
 }

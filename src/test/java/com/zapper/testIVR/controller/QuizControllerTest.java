@@ -19,9 +19,9 @@ public class QuizControllerTest {
   public void testContinuingQuestion() {
     quizController = new QuizController();
     mockHttpServletRequest = new MockHttpServletRequest();
-    mockHttpServletRequest.addParameter("cid","9100571475");
-    //mockHttpServletRequest.addParameter("sid","123456");
-    mockHttpServletRequest.addParameter("data","1");
+    mockHttpServletRequest.addParameter("cid","100");
+    mockHttpServletRequest.addParameter("event","gotDtmf");
+    mockHttpServletRequest.addParameter("data","2");
     System.out.println(quizController.startQuizService(mockHttpServletRequest));
   }
 

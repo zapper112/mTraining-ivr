@@ -14,12 +14,6 @@ public class CourseUtilTest {
 
   @Test
   @Ignore
-  public void testStartCoursesFromBeginning() {
-    System.out.println(new CourseUtil().startCoursesFromBeginning());
-  }
-
-  @Test
-  @Ignore
   public void testChapterRedirect() {
     System.out.println(new CourseUtil().redirectToChapterController(new User("90")));
   }

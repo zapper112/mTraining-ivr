@@ -29,7 +29,7 @@ public class ChapterController {
       new ChapterUtil().updateUCPwithChapter(new User(cid));
       Chapter lastCompletedChapter = new ChapterUtil().getLastCompletedChapter(new User(cid));
       response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/quiz?cid=" + cid);
-      return response.getXML().replace("&amp;","&");
+      return response.getXML();
     }
     else if (event != null && event.equalsIgnoreCase("gotdtmf") && data != null && data.equals("2")) {
       new ChapterUtil().updateUCPwithChapter(new User(cid));

@@ -27,7 +27,6 @@ public class QuizController {
    public String startQuizService(HttpServletRequest request) {
     String dtmf = request.getParameter("data"); //dtmf will be null on the first redirect from Chapter Controller
     callerId = request.getParameter("cid");
-    String sessionId = new QuizUtil().getCurrentSessionId(new User(callerId));
     currentUser = new User(callerId);
     Chapter chapter = new UserUtil().getChapterForQuiz(new User(callerId));
     return chooseAppropriateAction(currentUser, dtmf, chapter);
