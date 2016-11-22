@@ -10,4 +10,5 @@ public class StandardMessage {
   public static final String INVALID_INPUT = "That is not a valid input.";
   public static final String QUIZ_END = "You have attempted all quizzes in this chapter. Thank you!";
   public static final String ALL_CHAPTERS_FINISHED = "You have read all chapters in this course. Thank you!";
+  public static final String EXIT_MTRAINING = "Thank you for calling m Trainig.";
 }

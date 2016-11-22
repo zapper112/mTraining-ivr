@@ -3,6 +3,7 @@ package com.zapper.testIVR.controller;
 import com.zapper.testIVR.kookooJava.Response;
 import com.zapper.testIVR.model.Chapter;
 import com.zapper.testIVR.model.User;
+import com.zapper.testIVR.service.StandardMessage;
 import com.zapper.testIVR.util.ChapterUtil;
 import com.zapper.testIVR.util.UserUtil;
 
@@ -27,13 +28,12 @@ public class ChapterController {
     String data = request.getParameter("data");
     if(event != null && event.equalsIgnoreCase("gotdtmf") && data != null && data.equals("1") ) {
       new ChapterUtil().updateUCPwithChapter(new User(cid));
-      Chapter lastCompletedChapter = new ChapterUtil().getLastCompletedChapter(new User(cid));
       response.addGotoNEXTURL("http://183.82.96.201:8100/testIVR/mtrain/quiz?cid=" + cid);
       return response.getXML();
     }
     else if (event != null && event.equalsIgnoreCase("gotdtmf") && data != null && data.equals("2")) {
       new ChapterUtil().updateUCPwithChapter(new User(cid));
-      response.addPlayText("Thank you for calling m Trainig.");
+      response.addPlayText(StandardMessage.EXIT_MTRAINING);
       response.addHangup();
       return response.getXML();
     }
