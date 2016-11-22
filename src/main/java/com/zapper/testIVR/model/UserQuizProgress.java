@@ -1,6 +1,5 @@
 package com.zapper.testIVR.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "user_quiz_progress")
-public class UserQuizProgress extends UserFeedback {
+public class UserQuizProgress {
 
   private Integer id;
 
